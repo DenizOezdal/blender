@@ -114,6 +114,7 @@ void register_node_type_sh_output_aov(void);
 
 void register_node_type_sh_tex_image(void);
 void register_node_type_sh_tex_environment(void);
+void register_node_type_sh_tex_cubemap(void);
 void register_node_type_sh_tex_sky(void);
 void register_node_type_sh_tex_voronoi(void);
 void register_node_type_sh_tex_gradient(void);

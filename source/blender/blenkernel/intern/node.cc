@@ -734,6 +734,11 @@ void ntreeBlendReadData(BlendDataReader *reader, bNodeTree *ntree)
           tex->iuser.scene = nullptr;
           break;
         }
+        case SH_NODE_TEX_CUBEMAP: {
+          NodeTexCubemap* tex = (NodeTexCubemap*)node->storage;
+          tex->iuser.scene = nullptr;
+          break;
+        }
         case CMP_NODE_IMAGE:
         case CMP_NODE_R_LAYERS:
         case CMP_NODE_VIEWER:
@@ -4621,6 +4626,7 @@ static void registerShaderNodes()
 
   register_node_type_sh_tex_image();
   register_node_type_sh_tex_environment();
+  register_node_type_sh_tex_cubemap();
   register_node_type_sh_tex_sky();
   register_node_type_sh_tex_noise();
   register_node_type_sh_tex_wave();

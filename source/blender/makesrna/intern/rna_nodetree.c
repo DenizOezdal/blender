@@ -5283,6 +5283,55 @@ static void def_sh_tex_environment(StructRNA *srna)
   RNA_def_property_update(prop, 0, "rna_Node_update");
 }
 
+static void def_sh_tex_cubemap(StructRNA* srna)
+{
+  static const EnumPropertyItem prop_projection_items[] = {
+      {SHD_PROJ_EQUIRECTANGULAR,
+       "EQUIRECTANGULAR",
+       0,
+       "Equirectangular",
+       "Equirectangular or latitude-longitude projection"},
+      {SHD_PROJ_MIRROR_BALL,
+       "MIRROR_BALL",
+       0,
+       "Mirror Ball",
+       "Projection from an orthographic photo of a mirror ball"},
+      {0, NULL, 0, NULL, NULL},
+  };
+
+  PropertyRNA* prop;
+
+  prop = RNA_def_property(srna, "image", PROP_POINTER, PROP_NONE);
+  RNA_def_property_pointer_sdna(prop, NULL, "id");
+  RNA_def_property_struct_type(prop, "Image");
+  RNA_def_property_flag(prop, PROP_EDITABLE);
+  RNA_def_property_override_flag(prop, PROPOVERRIDE_OVERRIDABLE_LIBRARY);
+  RNA_def_property_ui_text(prop, "Image", "");
+  RNA_def_property_update(prop, NC_NODE | NA_EDITED, "rna_Node_tex_image_update");
+
+  RNA_def_struct_sdna_from(srna, "NodeTexCubemap", "storage");
+  def_sh_tex(srna);
+  /*
+  prop = RNA_def_property(srna, "projection", PROP_ENUM, PROP_NONE);
+  RNA_def_property_enum_items(prop, prop_projection_items);
+  RNA_def_property_ui_text(prop, "Projection", "Projection of the input image");
+  RNA_def_property_update(prop, 0, "rna_Node_update");
+  */
+  prop = RNA_def_property(srna, "interpolation", PROP_ENUM, PROP_NONE);
+  RNA_def_property_enum_items(prop, sh_tex_prop_interpolation_items);
+  RNA_def_property_ui_text(prop, "Interpolation", "Texture interpolation");
+  RNA_def_property_update(prop, 0, "rna_Node_update");
+
+  prop = RNA_def_property(srna, "image_user", PROP_POINTER, PROP_NONE);
+  RNA_def_property_flag(prop, PROP_NEVER_NULL);
+  RNA_def_property_pointer_sdna(prop, NULL, "iuser");
+  RNA_def_property_ui_text(
+    prop,
+    "Image User",
+    "Parameters defining which layer, pass and frame of the image is displayed");
+  RNA_def_property_update(prop, 0, "rna_Node_update");
+}
+
 static void def_sh_tex_image(StructRNA *srna)
 {
   static const EnumPropertyItem prop_projection_items[] = {

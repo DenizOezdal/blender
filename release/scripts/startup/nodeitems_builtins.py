@@ -375,6 +375,7 @@ shader_node_categories = [
     ShaderNodeCategory("SH_NEW_TEXTURE", "Texture", items=[
         NodeItem("ShaderNodeTexImage"),
         NodeItem("ShaderNodeTexEnvironment"),
+        NodeItem("ShaderNodeTexCubemap"),
         NodeItem("ShaderNodeTexSky"),
         NodeItem("ShaderNodeTexNoise"),
         NodeItem("ShaderNodeTexWave"),
