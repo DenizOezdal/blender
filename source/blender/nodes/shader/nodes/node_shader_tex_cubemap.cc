@@ -15,7 +15,7 @@ static void node_shader_init_tex_cubemap(bNodeTree *UNUSED(ntree), bNode *node)
   NodeTexCubemap *tex = MEM_cnew<NodeTexCubemap>("NodeTexCubemap");
   BKE_texture_mapping_default(&tex->base.tex_mapping, TEXMAP_TYPE_POINT);
   BKE_texture_colormapping_default(&tex->base.color_mapping);
-  //tex->projection = SHD_PROJ_EQUIRECTANGULAR;
+  tex->mode = SHD_CUBEMAP_MODE_SINGLE;
   BKE_imageuser_default(&tex->iuser);
 
   node->storage = tex;
@@ -51,30 +51,31 @@ static int node_shader_gpu_tex_cubemap(GPUMaterial *mat,
     GPU_link(mat, "node_tex_cubemap_texco", GPU_builtin(GPU_VIEW_POSITION), &in[0].link);
     node_shader_gpu_bump_tex_coord(mat, node, &in[0].link);
   }
-
   node_shader_gpu_tex_mapping(mat, node, in, out);
-#if 1
   /* Compute texture coordinate. */
-  if (tex->projection == SHD_PROJ_EQUIRECTANGULAR) {
-    GPU_link(mat, "node_tex_cubemap_equirectangular", in[0].link, &in[0].link);
+  if (tex->mode == SHD_CUBEMAP_MODE_SINGLE) {
+    GPU_link(mat, "node_tex_cubemap_single", in[0].link, &in[0].link);
     /* To fix pole issue we clamp the v coordinate. */
-    sampler &= ~GPU_SAMPLER_REPEAT_T;
+    //sampler &= ~GPU_SAMPLER_REPEAT_T;
     /* Force the highest mipmap and don't do anisotropic filtering.
      * This is to fix the artifact caused by derivatives discontinuity. */
-    sampler &= ~(GPU_SAMPLER_MIPMAP | GPU_SAMPLER_ANISO);
+   // sampler &= ~(GPU_SAMPLER_MIPMAP | GPU_SAMPLER_ANISO);
   }
   else {
-    GPU_link(mat, "node_tex_cubemap_mirror_ball", in[0].link, &in[0].link);
+    GPU_link(mat, "node_tex_cubemap_multi", in[0].link, &in[0].link);
     /* Fix pole issue. */
-    sampler &= ~GPU_SAMPLER_REPEAT;
+    //sampler &= ~GPU_SAMPLER_REPEAT;
   }
-#endif
   const char *gpu_fn;
   static const char *names[] = {
       "node_tex_image_linear",
       "node_tex_image_cubic",
   };
 
+  gpu_fn = names[0];
+
+#if 0
+//#if 0
   switch (tex->interpolation) {
     case SHD_INTERP_LINEAR:
       gpu_fn = names[0];
@@ -87,6 +88,7 @@ static int node_shader_gpu_tex_cubemap(GPUMaterial *mat,
       gpu_fn = names[1];
       break;
   }
+#endif
 
   /* Sample texture with correct interpolation. */
   GPU_link(mat, gpu_fn, in[0].link, GPU_image(mat, ima, iuser, sampler), &out[0].link, &outalpha);

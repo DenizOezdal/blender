@@ -436,10 +436,13 @@ static void node_shader_buts_tex_environment_ex(uiLayout *layout, bContext *C, P
 
 static void node_shader_buts_tex_cubemap(uiLayout* layout, bContext* C, PointerRNA* ptr)
 {
+  uiItemR(layout, ptr, "mode", DEFAULT_FLAGS, "", ICON_NONE);
+
   PointerRNA imaptr = RNA_pointer_get(ptr, "image");
   PointerRNA iuserptr = RNA_pointer_get(ptr, "image_user");
 
-  uiLayoutSetContextPointer(layout, "image_user", &iuserptr);
+  //uiLayoutSetContextPointer(layout, "image_user", &iuserptr);
+  
   uiTemplateID(layout,
     C,
     ptr,
@@ -450,11 +453,10 @@ static void node_shader_buts_tex_cubemap(uiLayout* layout, bContext* C, PointerR
     UI_TEMPLATE_ID_FILTER_ALL,
     false,
     nullptr);
+  
+  //uiItemR(layout, ptr, "projection", DEFAULT_FLAGS, "", ICON_NONE);
 
-  uiItemR(layout, ptr, "interpolation", DEFAULT_FLAGS, "", ICON_NONE);
-  uiItemR(layout, ptr, "projection", DEFAULT_FLAGS, "", ICON_NONE);
-
-  node_buts_image_user(layout, C, &iuserptr, &imaptr, &iuserptr, false, true);
+  //node_buts_image_user(layout, C, &iuserptr, &imaptr, &iuserptr, false, true);
 }
 
 static void node_shader_buts_tex_cubemap_ex(uiLayout* layout, bContext* C, PointerRNA* ptr)
@@ -462,8 +464,8 @@ static void node_shader_buts_tex_cubemap_ex(uiLayout* layout, bContext* C, Point
   PointerRNA iuserptr = RNA_pointer_get(ptr, "image_user");
   uiTemplateImage(layout, C, ptr, "image", &iuserptr, false, false);
 
-  uiItemR(layout, ptr, "interpolation", DEFAULT_FLAGS, IFACE_("Interpolation"), ICON_NONE);
-  uiItemR(layout, ptr, "projection", DEFAULT_FLAGS, IFACE_("Projection"), ICON_NONE);
+  uiItemR(layout, ptr, "mode", DEFAULT_FLAGS, IFACE_("Mode"), ICON_NONE);
+  //uiItemR(layout, ptr, "projection", DEFAULT_FLAGS, IFACE_("Projection"), ICON_NONE);
 }
 
 static void node_shader_buts_displacement(uiLayout *layout, bContext *UNUSED(C), PointerRNA *ptr)

@@ -91,6 +91,7 @@ extern char datatoc_gpu_shader_material_tangent_glsl[];
 extern char datatoc_gpu_shader_material_tex_brick_glsl[];
 extern char datatoc_gpu_shader_material_tex_checker_glsl[];
 extern char datatoc_gpu_shader_material_tex_environment_glsl[];
+extern char datatoc_gpu_shader_material_tex_cubemap_glsl[];
 extern char datatoc_gpu_shader_material_tex_gradient_glsl[];
 extern char datatoc_gpu_shader_material_tex_image_glsl[];
 extern char datatoc_gpu_shader_material_tex_magic_glsl[];
@@ -450,6 +451,11 @@ static GPUMaterialLibrary gpu_shader_material_tex_environment_library = {
     .dependencies = {&gpu_shader_material_math_util_library, NULL},
 };
 
+static GPUMaterialLibrary gpu_shader_material_tex_cubemap_library = {
+    .code = datatoc_gpu_shader_material_tex_cubemap_glsl,
+    .dependencies = {&gpu_shader_material_math_util_library, NULL},
+};
+
 static GPUMaterialLibrary gpu_shader_material_tex_gradient_library = {
     .code = datatoc_gpu_shader_material_tex_gradient_glsl,
     .dependencies = {NULL},
@@ -649,6 +655,7 @@ static GPUMaterialLibrary *gpu_material_libraries[] = {
     &gpu_shader_material_tex_brick_library,
     &gpu_shader_material_tex_checker_library,
     &gpu_shader_material_tex_environment_library,
+    &gpu_shader_material_tex_cubemap_library,
     &gpu_shader_material_tex_gradient_library,
     &gpu_shader_material_tex_image_library,
     &gpu_shader_material_tex_magic_library,

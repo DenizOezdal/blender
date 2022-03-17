@@ -5285,17 +5285,17 @@ static void def_sh_tex_environment(StructRNA *srna)
 
 static void def_sh_tex_cubemap(StructRNA* srna)
 {
-  static const EnumPropertyItem prop_projection_items[] = {
-      {SHD_PROJ_EQUIRECTANGULAR,
-       "EQUIRECTANGULAR",
+  static const EnumPropertyItem mode_items[] = {
+      {SHD_CUBEMAP_MODE_SINGLE,
+       "SINGLE",
        0,
-       "Equirectangular",
-       "Equirectangular or latitude-longitude projection"},
-      {SHD_PROJ_MIRROR_BALL,
-       "MIRROR_BALL",
+       "Single",
+       "Use single image for cubemap"},
+      {SHD_CUBEMAP_MODE_MULTI,
+       "MULTI",
        0,
-       "Mirror Ball",
-       "Projection from an orthographic photo of a mirror ball"},
+       "Multiple",
+       "Use six images, one for each side of the cubemap"},
       {0, NULL, 0, NULL, NULL},
   };
 
@@ -5312,16 +5312,16 @@ static void def_sh_tex_cubemap(StructRNA* srna)
   RNA_def_struct_sdna_from(srna, "NodeTexCubemap", "storage");
   def_sh_tex(srna);
   
-  prop = RNA_def_property(srna, "projection", PROP_ENUM, PROP_NONE);
-  RNA_def_property_enum_items(prop, prop_projection_items);
-  RNA_def_property_ui_text(prop, "Projection", "Projection of the input image");
+  prop = RNA_def_property(srna, "mode", PROP_ENUM, PROP_NONE);
+  RNA_def_property_enum_items(prop, mode_items);
+  RNA_def_property_ui_text(prop, "Mode", "The input texture mode");
   RNA_def_property_update(prop, 0, "rna_Node_update");
-  
+  /*
   prop = RNA_def_property(srna, "interpolation", PROP_ENUM, PROP_NONE);
   RNA_def_property_enum_items(prop, sh_tex_prop_interpolation_items);
   RNA_def_property_ui_text(prop, "Interpolation", "Texture interpolation");
   RNA_def_property_update(prop, 0, "rna_Node_update");
-
+  */
   prop = RNA_def_property(srna, "image_user", PROP_POINTER, PROP_NONE);
   RNA_def_property_flag(prop, PROP_NEVER_NULL);
   RNA_def_property_pointer_sdna(prop, NULL, "iuser");

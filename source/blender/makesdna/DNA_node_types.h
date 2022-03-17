@@ -989,9 +989,9 @@ typedef struct NodeTexEnvironment {
 typedef struct NodeTexCubemap {
   NodeTexBase base;
   ImageUser iuser;
-  int projection;
-  int interpolation;
-  //char _pad[4];
+  int mode;
+  //int interpolation;
+  char _pad[4];
 } NodeTexCubemap;
 
 typedef struct NodeTexGradient {
@@ -1634,6 +1634,10 @@ enum {
 #define SHD_IMAGE_EXTENSION_REPEAT 0
 #define SHD_IMAGE_EXTENSION_EXTEND 1
 #define SHD_IMAGE_EXTENSION_CLIP 2
+
+/* environment texture */
+#define SHD_CUBEMAP_MODE_SINGLE 0
+#define SHD_CUBEMAP_MODE_MULTI 1
 
 /* image texture */
 #define SHD_PROJ_FLAT 0
