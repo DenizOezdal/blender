@@ -989,9 +989,9 @@ typedef struct NodeTexEnvironment {
 typedef struct NodeTexCubemap {
   NodeTexBase base;
   ImageUser iuser;
-  //int projection;
+  int projection;
   int interpolation;
-  char _pad[4];
+  //char _pad[4];
 } NodeTexCubemap;
 
 typedef struct NodeTexGradient {

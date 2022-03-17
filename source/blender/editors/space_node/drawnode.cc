@@ -434,6 +434,38 @@ static void node_shader_buts_tex_environment_ex(uiLayout *layout, bContext *C, P
   uiItemR(layout, ptr, "projection", DEFAULT_FLAGS, IFACE_("Projection"), ICON_NONE);
 }
 
+static void node_shader_buts_tex_cubemap(uiLayout* layout, bContext* C, PointerRNA* ptr)
+{
+  PointerRNA imaptr = RNA_pointer_get(ptr, "image");
+  PointerRNA iuserptr = RNA_pointer_get(ptr, "image_user");
+
+  uiLayoutSetContextPointer(layout, "image_user", &iuserptr);
+  uiTemplateID(layout,
+    C,
+    ptr,
+    "image",
+    "IMAGE_OT_new",
+    "IMAGE_OT_open",
+    nullptr,
+    UI_TEMPLATE_ID_FILTER_ALL,
+    false,
+    nullptr);
+
+  uiItemR(layout, ptr, "interpolation", DEFAULT_FLAGS, "", ICON_NONE);
+  uiItemR(layout, ptr, "projection", DEFAULT_FLAGS, "", ICON_NONE);
+
+  node_buts_image_user(layout, C, &iuserptr, &imaptr, &iuserptr, false, true);
+}
+
+static void node_shader_buts_tex_cubemap_ex(uiLayout* layout, bContext* C, PointerRNA* ptr)
+{
+  PointerRNA iuserptr = RNA_pointer_get(ptr, "image_user");
+  uiTemplateImage(layout, C, ptr, "image", &iuserptr, false, false);
+
+  uiItemR(layout, ptr, "interpolation", DEFAULT_FLAGS, IFACE_("Interpolation"), ICON_NONE);
+  uiItemR(layout, ptr, "projection", DEFAULT_FLAGS, IFACE_("Projection"), ICON_NONE);
+}
+
 static void node_shader_buts_displacement(uiLayout *layout, bContext *UNUSED(C), PointerRNA *ptr)
 {
   uiItemR(layout, ptr, "space", DEFAULT_FLAGS, "", 0);
@@ -487,6 +519,10 @@ static void node_shader_set_butfunc(bNodeType *ntype)
     case SH_NODE_TEX_ENVIRONMENT:
       ntype->draw_buttons = node_shader_buts_tex_environment;
       ntype->draw_buttons_ex = node_shader_buts_tex_environment_ex;
+      break;
+    case SH_NODE_TEX_CUBEMAP:
+      ntype->draw_buttons = node_shader_buts_tex_cubemap;
+      ntype->draw_buttons_ex = node_shader_buts_tex_cubemap_ex;
       break;
     case SH_NODE_DISPLACEMENT:
     case SH_NODE_VECTOR_DISPLACEMENT:

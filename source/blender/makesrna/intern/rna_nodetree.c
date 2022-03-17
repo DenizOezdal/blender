@@ -5311,12 +5311,12 @@ static void def_sh_tex_cubemap(StructRNA* srna)
 
   RNA_def_struct_sdna_from(srna, "NodeTexCubemap", "storage");
   def_sh_tex(srna);
-  /*
+  
   prop = RNA_def_property(srna, "projection", PROP_ENUM, PROP_NONE);
   RNA_def_property_enum_items(prop, prop_projection_items);
   RNA_def_property_ui_text(prop, "Projection", "Projection of the input image");
   RNA_def_property_update(prop, 0, "rna_Node_update");
-  */
+  
   prop = RNA_def_property(srna, "interpolation", PROP_ENUM, PROP_NONE);
   RNA_def_property_enum_items(prop, sh_tex_prop_interpolation_items);
   RNA_def_property_ui_text(prop, "Interpolation", "Texture interpolation");

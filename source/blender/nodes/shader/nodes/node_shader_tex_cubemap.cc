@@ -53,7 +53,7 @@ static int node_shader_gpu_tex_cubemap(GPUMaterial *mat,
   }
 
   node_shader_gpu_tex_mapping(mat, node, in, out);
-#if 0
+#if 1
   /* Compute texture coordinate. */
   if (tex->projection == SHD_PROJ_EQUIRECTANGULAR) {
     GPU_link(mat, "node_tex_cubemap_equirectangular", in[0].link, &in[0].link);
