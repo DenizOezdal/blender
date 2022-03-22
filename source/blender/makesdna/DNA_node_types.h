@@ -989,6 +989,12 @@ typedef struct NodeTexEnvironment {
 typedef struct NodeTexCubemap {
   NodeTexBase base;
   ImageUser iuser;
+  bNodeSocketValueImage top;
+  bNodeSocketValueImage buttom;
+  bNodeSocketValueImage left;
+  bNodeSocketValueImage right;
+  bNodeSocketValueImage front;
+  bNodeSocketValueImage back;
   int mode;
   //int interpolation;
   char _pad[4];
