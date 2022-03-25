@@ -27,7 +27,7 @@ static int node_shader_gpu_tex_cubemap(GPUMaterial *mat,
                                            GPUNodeStack *in,
                                            GPUNodeStack *out)
 {
-  Image *ima = (Image *)node->id;
+  //Image *ima = (Image *)node->id;
   NodeTexCubemap *tex = (NodeTexCubemap *)node->storage;
 
   /* We get the image user from the original node, since GPU image keeps
@@ -41,38 +41,69 @@ static int node_shader_gpu_tex_cubemap(GPUMaterial *mat,
     sampler |= GPU_SAMPLER_MIPMAP;
   }
 
-  GPUNodeLink *outalpha;
-
-  if (!ima) {
-    return GPU_stack_link(mat, node, "node_tex_cubemap_empty", in, out);
-  }
 
   if (!in[0].link) {
     GPU_link(mat, "node_tex_cubemap_texco", GPU_builtin(GPU_VIEW_POSITION), &in[0].link);
     node_shader_gpu_bump_tex_coord(mat, node, &in[0].link);
   }
+
   node_shader_gpu_tex_mapping(mat, node, in, out);
   /* Compute texture coordinate. */
+#if 0
   if (tex->mode == SHD_CUBEMAP_MODE_SINGLE) {
     GPU_link(mat, "node_tex_cubemap_single", in[0].link, &in[0].link);
     /* To fix pole issue we clamp the v coordinate. */
     //sampler &= ~GPU_SAMPLER_REPEAT_T;
     /* Force the highest mipmap and don't do anisotropic filtering.
      * This is to fix the artifact caused by derivatives discontinuity. */
-   // sampler &= ~(GPU_SAMPLER_MIPMAP | GPU_SAMPLER_ANISO);
+     // sampler &= ~(GPU_SAMPLER_MIPMAP | GPU_SAMPLER_ANISO);
   }
   else {
     GPU_link(mat, "node_tex_cubemap_multi", in[0].link, &in[0].link);
     /* Fix pole issue. */
     //sampler &= ~GPU_SAMPLER_REPEAT;
   }
-  const char *gpu_fn;
-  static const char *names[] = {
+#endif 
+
+  /*
+  if (!ima) {
+    return GPU_stack_link(mat, node, "node_tex_cubemap_empty", in, out);
+  }
+  */
+
+  const char* gpu_fn;
+  static const char* names[] = {
       "node_tex_image_linear",
       "node_tex_image_cubic",
   };
 
-  gpu_fn = names[0];
+  //gpu_fn = names[0];
+  gpu_fn = "node_tex_cubemap_multi";
+
+  GPUNodeLink* outalpha;
+
+  if (!tex->top.value || !tex->buttom.value || !tex->left.value || !tex->right.value || !tex->front.value || !tex->back.value) {
+    return GPU_stack_link(mat, node, "node_tex_cubemap_empty", in, out);
+  } else {
+    /*
+    GPU_link(mat, gpu_fn, in[0].link, GPU_image(mat, tex->top.value, iuser, sampler), &in[0].link);
+    GPU_link(mat, gpu_fn, in[1].link, GPU_image(mat, tex->buttom.value, iuser, sampler), &in[1].link);
+    GPU_link(mat, gpu_fn, in[2].link, GPU_image(mat, tex->left.value, iuser, sampler), &in[2].link);
+    GPU_link(mat, gpu_fn, in[3].link, GPU_image(mat, tex->right.value, iuser, sampler), &in[3].link);
+    GPU_link(mat, gpu_fn, in[4].link, GPU_image(mat, tex->front.value, iuser, sampler), &in[4].link);
+    GPU_link(mat, gpu_fn, in[5].link, GPU_image(mat, tex->back.value, iuser, sampler), &out[5].link);
+    */
+
+    GPU_link(mat, gpu_fn, in[0].link,
+      GPU_image(mat, tex->top.value, iuser, sampler),
+      GPU_image(mat, tex->buttom.value, iuser, sampler),
+      GPU_image(mat, tex->left.value, iuser, sampler),
+      GPU_image(mat, tex->right.value, iuser, sampler),
+      GPU_image(mat, tex->front.value, iuser, sampler),
+      GPU_image(mat, tex->back.value, iuser, sampler),
+      &out[0].link);
+  }
+
 
 #if 0
 //#if 0
@@ -88,9 +119,9 @@ static int node_shader_gpu_tex_cubemap(GPUMaterial *mat,
       gpu_fn = names[1];
       break;
   }
-#endif
-
+  GPUNodeLink* outalpha;
   /* Sample texture with correct interpolation. */
+
   GPU_link(mat, gpu_fn, in[0].link, GPU_image(mat, ima, iuser, sampler), &out[0].link, &outalpha);
 
   if (out[0].hasoutput) {
@@ -109,6 +140,7 @@ static int node_shader_gpu_tex_cubemap(GPUMaterial *mat,
       }
     }
   }
+#endif
 
   return true;
 }

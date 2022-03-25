@@ -438,8 +438,8 @@ static void node_shader_buts_tex_cubemap(uiLayout* layout, bContext* C, PointerR
 {
   uiItemR(layout, ptr, "mode", DEFAULT_FLAGS, "", ICON_NONE);
 
-  PointerRNA imaptr = RNA_pointer_get(ptr, "image");
-  PointerRNA iuserptr = RNA_pointer_get(ptr, "image_user");
+  //PointerRNA imaptr = RNA_pointer_get(ptr, "image");
+  //PointerRNA iuserptr = RNA_pointer_get(ptr, "image_user");
 
   //uiLayoutSetContextPointer(layout, "image_user", &iuserptr);
   
