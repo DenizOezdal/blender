@@ -442,72 +442,87 @@ static void node_shader_buts_tex_cubemap(uiLayout* layout, bContext* C, PointerR
   //PointerRNA iuserptr = RNA_pointer_get(ptr, "image_user");
 
   //uiLayoutSetContextPointer(layout, "image_user", &iuserptr);
-  
-  uiTemplateID(layout,
-    C,
-    ptr,
-    "top",
-    "IMAGE_OT_new",
-    "IMAGE_OT_open",
-    nullptr,
-    UI_TEMPLATE_ID_FILTER_ALL,
-    false,
-    nullptr);
+  bNode* node = (bNode*)ptr->data;
+  NodeTexCubemap* tex = (NodeTexCubemap*)node->storage;
+  if (tex->mode == SHD_CUBEMAP_MODE_SINGLE) {
+    uiTemplateID(layout,
+      C,
+      ptr,
+      "image",
+      "IMAGE_OT_new",
+      "IMAGE_OT_open",
+      nullptr,
+      UI_TEMPLATE_ID_FILTER_ALL,
+      false,
+      nullptr);
+  }
+  else {
+    uiTemplateID(layout,
+      C,
+      ptr,
+      "up",
+      "IMAGE_OT_new",
+      "IMAGE_OT_open",
+      nullptr,
+      UI_TEMPLATE_ID_FILTER_ALL,
+      false,
+      nullptr);
 
-  uiTemplateID(layout,
-    C,
-    ptr,
-    "buttom",
-    "IMAGE_OT_new",
-    "IMAGE_OT_open",
-    nullptr,
-    UI_TEMPLATE_ID_FILTER_ALL,
-    false,
-    nullptr);
+    uiTemplateID(layout,
+      C,
+      ptr,
+      "down",
+      "IMAGE_OT_new",
+      "IMAGE_OT_open",
+      nullptr,
+      UI_TEMPLATE_ID_FILTER_ALL,
+      false,
+      nullptr);
 
-  uiTemplateID(layout,
-    C,
-    ptr,
-    "left",
-    "IMAGE_OT_new",
-    "IMAGE_OT_open",
-    nullptr,
-    UI_TEMPLATE_ID_FILTER_ALL,
-    false,
-    nullptr);
+    uiTemplateID(layout,
+      C,
+      ptr,
+      "left",
+      "IMAGE_OT_new",
+      "IMAGE_OT_open",
+      nullptr,
+      UI_TEMPLATE_ID_FILTER_ALL,
+      false,
+      nullptr);
 
-  uiTemplateID(layout,
-    C,
-    ptr,
-    "right",
-    "IMAGE_OT_new",
-    "IMAGE_OT_open",
-    nullptr,
-    UI_TEMPLATE_ID_FILTER_ALL,
-    false,
-    nullptr);
+    uiTemplateID(layout,
+      C,
+      ptr,
+      "right",
+      "IMAGE_OT_new",
+      "IMAGE_OT_open",
+      nullptr,
+      UI_TEMPLATE_ID_FILTER_ALL,
+      false,
+      nullptr);
 
-  uiTemplateID(layout,
-    C,
-    ptr,
-    "front",
-    "IMAGE_OT_new",
-    "IMAGE_OT_open",
-    nullptr,
-    UI_TEMPLATE_ID_FILTER_ALL,
-    false,
-    nullptr);
+    uiTemplateID(layout,
+      C,
+      ptr,
+      "front",
+      "IMAGE_OT_new",
+      "IMAGE_OT_open",
+      nullptr,
+      UI_TEMPLATE_ID_FILTER_ALL,
+      false,
+      nullptr);
 
-  uiTemplateID(layout,
-    C,
-    ptr,
-    "back",
-    "IMAGE_OT_new",
-    "IMAGE_OT_open",
-    nullptr,
-    UI_TEMPLATE_ID_FILTER_ALL,
-    false,
-    nullptr);
+    uiTemplateID(layout,
+      C,
+      ptr,
+      "back",
+      "IMAGE_OT_new",
+      "IMAGE_OT_open",
+      nullptr,
+      UI_TEMPLATE_ID_FILTER_ALL,
+      false,
+      nullptr);
+  }
   
   //uiItemR(layout, ptr, "projection", DEFAULT_FLAGS, "", ICON_NONE);
 

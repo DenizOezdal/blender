@@ -989,8 +989,8 @@ typedef struct NodeTexEnvironment {
 typedef struct NodeTexCubemap {
   NodeTexBase base;
   ImageUser iuser;
-  bNodeSocketValueImage top;
-  bNodeSocketValueImage buttom;
+  bNodeSocketValueImage up;
+  bNodeSocketValueImage down;
   bNodeSocketValueImage left;
   bNodeSocketValueImage right;
   bNodeSocketValueImage front;

@@ -5299,25 +5299,33 @@ static void def_sh_tex_cubemap(StructRNA* srna)
       {0, NULL, 0, NULL, NULL},
   };
 
+  PropertyRNA* prop;
+
+  prop = RNA_def_property(srna, "image", PROP_POINTER, PROP_NONE);
+  RNA_def_property_pointer_sdna(prop, NULL, "id");
+  RNA_def_property_struct_type(prop, "Image");
+  RNA_def_property_flag(prop, PROP_EDITABLE);
+  RNA_def_property_override_flag(prop, PROPOVERRIDE_OVERRIDABLE_LIBRARY);
+  RNA_def_property_ui_text(prop, "Image", "");
+  RNA_def_property_update(prop, NC_NODE | NA_EDITED, "rna_Node_tex_image_update");
+
   RNA_def_struct_sdna_from(srna, "NodeTexCubemap", "storage");
   def_sh_tex(srna);
 
-  PropertyRNA* prop;
-
-  prop = RNA_def_property(srna, "top", PROP_POINTER, PROP_NONE);
-  RNA_def_property_pointer_sdna(prop, NULL, "top.value");
+  prop = RNA_def_property(srna, "up", PROP_POINTER, PROP_NONE);
+  RNA_def_property_pointer_sdna(prop, NULL, "up.value");
   RNA_def_property_struct_type(prop, "Image");
   RNA_def_property_flag(prop, PROP_EDITABLE);
   RNA_def_property_override_flag(prop, PROPOVERRIDE_OVERRIDABLE_LIBRARY);
-  RNA_def_property_ui_text(prop, "Top", "");
+  RNA_def_property_ui_text(prop, "Up", "");
   RNA_def_property_update(prop, NC_NODE | NA_EDITED, "rna_Node_tex_image_update");
 
-  prop = RNA_def_property(srna, "buttom", PROP_POINTER, PROP_NONE);
-  RNA_def_property_pointer_sdna(prop, NULL, "buttom.value");
+  prop = RNA_def_property(srna, "down", PROP_POINTER, PROP_NONE);
+  RNA_def_property_pointer_sdna(prop, NULL, "down.value");
   RNA_def_property_struct_type(prop, "Image");
   RNA_def_property_flag(prop, PROP_EDITABLE);
   RNA_def_property_override_flag(prop, PROPOVERRIDE_OVERRIDABLE_LIBRARY);
-  RNA_def_property_ui_text(prop, "Buttom", "");
+  RNA_def_property_ui_text(prop, "Down", "");
   RNA_def_property_update(prop, NC_NODE | NA_EDITED, "rna_Node_tex_image_update");
 
   prop = RNA_def_property(srna, "left", PROP_POINTER, PROP_NONE);
