@@ -5247,7 +5247,31 @@ static void def_sh_tex_environment(StructRNA *srna)
        0,
        "Mirror Ball",
        "Projection from an orthographic photo of a mirror ball"},
+      {SHD_PROJ_CUBEMAP,
+       "CUBEMAP",
+       0,
+       "Cubemap",
+       "Projection from cubemap"},
       {0, NULL, 0, NULL, NULL},
+  };
+
+  static const EnumPropertyItem prop_cubemap_layout_items[] = {
+    {SHD_CBLT_CROSS_HORIZONTAL,
+     "CROSS_HORIZONTAL",
+     0,
+     "Horizontal cross",
+     "Projection from a cubemap in horizontal cross layout with OpenGL convention."},
+    {SHD_CBLT_STRIPE_HORIZONTAL,
+     "STRIPE_HORIZONTAL",
+     0,
+     "Horizontal stripe",
+     "Projection from horizontally laid out cubemap faces."},
+    {SHD_CBLT_STRIPE_VERTICAL,
+     "STRIPE_VERTICAL",
+     0,
+     "Vertical stripe",
+     "Projection from vertically laid out cubemap faces."},
+    {0, NULL, 0, NULL, NULL},
   };
 
   PropertyRNA *prop;
@@ -5266,6 +5290,11 @@ static void def_sh_tex_environment(StructRNA *srna)
   prop = RNA_def_property(srna, "projection", PROP_ENUM, PROP_NONE);
   RNA_def_property_enum_items(prop, prop_projection_items);
   RNA_def_property_ui_text(prop, "Projection", "Projection of the input image");
+  RNA_def_property_update(prop, 0, "rna_Node_update");
+
+  prop = RNA_def_property(srna, "cubemap_layout", PROP_ENUM, PROP_NONE);
+  RNA_def_property_enum_items(prop, prop_cubemap_layout_items);
+  RNA_def_property_ui_text(prop, "Layout", "Cubemap layout");
   RNA_def_property_update(prop, 0, "rna_Node_update");
 
   prop = RNA_def_property(srna, "interpolation", PROP_ENUM, PROP_NONE);

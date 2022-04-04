@@ -17,6 +17,7 @@ static void node_shader_init_tex_environment(bNodeTree *UNUSED(ntree), bNode *no
   BKE_texture_mapping_default(&tex->base.tex_mapping, TEXMAP_TYPE_POINT);
   BKE_texture_colormapping_default(&tex->base.color_mapping);
   tex->projection = SHD_PROJ_EQUIRECTANGULAR;
+  tex->cubemap_layout = SHD_CBLT_CROSS_HORIZONTAL;
   BKE_imageuser_default(&tex->iuser);
 
   node->storage = tex;
@@ -64,10 +65,21 @@ static int node_shader_gpu_tex_environment(GPUMaterial *mat,
      * This is to fix the artifact caused by derivatives discontinuity. */
     sampler &= ~(GPU_SAMPLER_MIPMAP | GPU_SAMPLER_ANISO);
   }
-  else {
+  else if (tex->projection == SHD_PROJ_MIRROR_BALL) {
     GPU_link(mat, "node_tex_environment_mirror_ball", in[0].link, &in[0].link);
     /* Fix pole issue. */
     sampler &= ~GPU_SAMPLER_REPEAT;
+  }
+  else {
+    if (tex->cubemap_layout == SHD_CBLT_CROSS_HORIZONTAL) {
+      GPU_link(mat, "node_tex_environment_cubemap_cross_horizontal", in[0].link, &in[0].link);
+    }
+    else if (tex->cubemap_layout == SHD_CBLT_STRIPE_HORIZONTAL) {
+      GPU_link(mat, "node_tex_environment_cubemap_stripe_horizontal", in[0].link, &in[0].link);
+    }
+    else {
+      GPU_link(mat, "node_tex_environment_cubemap_stripe_vertical", in[0].link, &in[0].link);
+    }
   }
 
   const char *gpu_fn;

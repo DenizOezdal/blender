@@ -984,8 +984,8 @@ typedef struct NodeTexEnvironment {
   ImageUser iuser;
   int color_space DNA_DEPRECATED;
   int projection;
+  int cubemap_layout;
   int interpolation;
-  char _pad[4];
 } NodeTexEnvironment;
 
 typedef struct NodeTexGradient {
@@ -1629,6 +1629,11 @@ enum {
 /* environment texture */
 #define SHD_PROJ_EQUIRECTANGULAR 0
 #define SHD_PROJ_MIRROR_BALL 1
+#define SHD_PROJ_CUBEMAP 2
+
+#define SHD_CBLT_CROSS_HORIZONTAL 0
+#define SHD_CBLT_STRIPE_HORIZONTAL 1
+#define SHD_CBLT_STRIPE_VERTICAL 2
 
 #define SHD_IMAGE_EXTENSION_REPEAT 0
 #define SHD_IMAGE_EXTENSION_EXTEND 1
