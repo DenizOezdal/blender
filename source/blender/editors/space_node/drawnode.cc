@@ -422,6 +422,12 @@ static void node_shader_buts_tex_environment(uiLayout *layout, bContext *C, Poin
   uiItemR(layout, ptr, "interpolation", DEFAULT_FLAGS, "", ICON_NONE);
   uiItemR(layout, ptr, "projection", DEFAULT_FLAGS, "", ICON_NONE);
 
+  bNode* node = (bNode*)ptr->data;
+  NodeTexEnvironment* tex = (NodeTexEnvironment*)node->storage;
+  if (tex->projection == SHD_PROJ_CUBEMAP) {
+    uiItemR(layout, ptr, "cubemap_layout", DEFAULT_FLAGS, "", ICON_NONE);
+  }
+
   node_buts_image_user(layout, C, &iuserptr, &imaptr, &iuserptr, false, true);
 }
 
