@@ -454,7 +454,14 @@ typedef enum NodeImageFlags {
 typedef enum NodeEnvironmentProjection {
   NODE_ENVIRONMENT_EQUIRECTANGULAR = 0,
   NODE_ENVIRONMENT_MIRROR_BALL = 1,
+  NODE_ENVIRONMENT_CUBEMAP = 2,
 } NodeEnvironmentProjection;
+
+typedef enum NodeEnvironmentCubemapLayout {
+  NODE_ENVIRONMENT_CROSS_HORIZONTAL = 0,
+  NODE_ENVIRONMENT_STRIPE_HORIZONTAL = 1,
+  NODE_ENVIRONMENT_STRIPE_VERTICAL = 2,
+} NodeEnvironmentCubemapLayout;
 
 typedef enum NodeBumpOffset {
   NODE_BUMP_OFFSET_CENTER,
