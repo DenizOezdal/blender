@@ -784,6 +784,7 @@ static ShaderNode *add_node(Scene *scene,
 
     env->set_interpolation(get_image_interpolation(b_env_node));
     env->set_projection((NodeEnvironmentProjection)b_env_node.projection());
+    env->set_cubemap_layout((NodeEnvironmentCubemapLayout)b_env_node.cubemap_layout());
     BL::TexMapping b_texture_mapping(b_env_node.texture_mapping());
     get_tex_mapping(env, b_texture_mapping);
 

@@ -144,15 +144,74 @@ void node_tex_environment_cubemap_stripe_horizontal(vec3 co, out vec3 uv) {
   // Convert v range from -1 to 1 to 0 to 1 as the texture space is 1 face high
   float v = 0.5f * (vc / maxAxis + 1.0f);
 
-  // Slide uv horizontally
-  u += index * 0.166666;
+  // Some coordinates are reordered to take Blender's internal transform system into account
+  // while we offset the uv coordinate to the right face.
+  switch(index) {
+  case 0:
+    break;
+  case 1:
+    u += 0.166666;
+    break;
+  case 2:
+    // -Z
+    u += 0.166666 * 5;
+    break;
+  case 3:
+    // Z
+    u += 0.166666 * 4;
+    break;
+  case 4:
+    // Y
+    u += 0.166666 * 2;
+    break;
+  case 5:
+    // -Y
+    u += 0.166666 * 3;
+    break;
+  }
 
   uv.x = u;
   uv.y = v;
 }
 
 void node_tex_environment_cubemap_stripe_vertical(vec3 co, out vec3 uv) {
-  return;
+  float maxAxis, uc, vc;
+  int index = -1;
+
+  node_tex_environment_cubemap_projection(co, uc, vc, maxAxis, index);
+  // Convert v range from -1 to 1 to 0 to 1 as the texture space is 1 face high
+  float u = 0.5f * (uc / maxAxis + 1.0f);
+  // Convert u range from -1 to 1 to 0 to 0.166667 (1/6) as the texture space is 6 faces high
+  float v = 0.083333f * (vc / maxAxis + 1.0f);
+
+  // Some coordinates are reordered to take Blender's internal transform system into account
+  // while we offset the uv coordinate to the right face.
+  switch(index) {
+  case 0:
+    break;
+  case 1:
+    v += 0.166666;
+    break;
+  case 2:
+    // -Z
+    v += 0.166666 * 5;
+    break;
+  case 3:
+    // Z
+    v += 0.166666 * 4;
+    break;
+  case 4:
+    // Y
+    v += 0.166666 * 2;
+    break;
+  case 5:
+    // -Y
+    v += 0.166666 * 3;
+    break;
+  }
+
+  uv.x = u;
+  uv.y = 1 - v;
 }
 
 void node_tex_environment_empty(vec3 co, out vec4 color)

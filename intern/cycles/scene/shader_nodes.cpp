@@ -509,7 +509,14 @@ NODE_DEFINE(EnvironmentTextureNode)
   static NodeEnum projection_enum;
   projection_enum.insert("equirectangular", NODE_ENVIRONMENT_EQUIRECTANGULAR);
   projection_enum.insert("mirror_ball", NODE_ENVIRONMENT_MIRROR_BALL);
+  projection_enum.insert("cubemap", NODE_ENVIRONMENT_CUBEMAP);
   SOCKET_ENUM(projection, "Projection", projection_enum, NODE_ENVIRONMENT_EQUIRECTANGULAR);
+
+  static NodeEnum cubemap_layout_enum;
+  cubemap_layout_enum.insert("cross_horizontal", NODE_ENVIRONMENT_CROSS_HORIZONTAL);
+  cubemap_layout_enum.insert("stripe_horizontal", NODE_ENVIRONMENT_STRIPE_HORIZONTAL);
+  cubemap_layout_enum.insert("stripe_vertical", NODE_ENVIRONMENT_STRIPE_VERTICAL);
+  SOCKET_ENUM(cubemap_layout, "Layout", cubemap_layout_enum, NODE_ENVIRONMENT_CROSS_HORIZONTAL);
 
   SOCKET_BOOLEAN(animated, "Animated", false);
 
@@ -614,6 +621,7 @@ void EnvironmentTextureNode::compile(OSLCompiler &compiler)
   }
 
   compiler.parameter(this, "projection");
+  compiler.parameter(this, "cubemap_layout");
   compiler.parameter(this, "interpolation");
   compiler.parameter("compress_as_srgb", compress_as_srgb);
   compiler.parameter("ignore_alpha", alpha_type == IMAGE_ALPHA_IGNORE);

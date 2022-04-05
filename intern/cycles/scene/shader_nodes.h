@@ -144,6 +144,7 @@ class EnvironmentTextureNode : public ImageSlotTextureNode {
   NODE_SOCKET_API(ustring, colorspace)
   NODE_SOCKET_API(ImageAlphaType, alpha_type)
   NODE_SOCKET_API(NodeEnvironmentProjection, projection)
+  NODE_SOCKET_API(NodeEnvironmentCubemapLayout, cubemap_layout)
   NODE_SOCKET_API(InterpolationType, interpolation)
   NODE_SOCKET_API(bool, animated)
   NODE_SOCKET_API(float3, vector)
