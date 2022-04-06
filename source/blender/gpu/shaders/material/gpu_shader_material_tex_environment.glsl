@@ -134,7 +134,8 @@ void node_tex_environment_cubemap_cross_horizontal(vec3 co, out vec3 uv)
   uv.y = v;
 }
 
-void node_tex_environment_cubemap_stripe_horizontal(vec3 co, out vec3 uv) {
+void node_tex_environment_cubemap_stripe_horizontal(vec3 co, out vec3 uv)
+{
   float maxAxis, uc, vc;
   int index = -1;
 
@@ -174,7 +175,8 @@ void node_tex_environment_cubemap_stripe_horizontal(vec3 co, out vec3 uv) {
   uv.y = v;
 }
 
-void node_tex_environment_cubemap_stripe_vertical(vec3 co, out vec3 uv) {
+void node_tex_environment_cubemap_stripe_vertical(vec3 co, out vec3 uv)
+{
   float maxAxis, uc, vc;
   int index = -1;
 

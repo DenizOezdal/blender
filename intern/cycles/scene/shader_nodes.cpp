@@ -587,6 +587,8 @@ void EnvironmentTextureNode::compile(SVMCompiler &compiler)
     flags |= NODE_IMAGE_COMPRESS_AS_SRGB;
   }
 
+  flags |= cubemap_layout << 4;
+
   compiler.add_node(NODE_TEX_ENVIRONMENT,
                     handle.svm_slot(),
                     compiler.encode_uchar4(vector_offset,

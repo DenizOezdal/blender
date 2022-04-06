@@ -228,8 +228,10 @@ ccl_device_noinline void svm_node_tex_environment(KernelGlobals kg,
     uv = direction_to_equirectangular(co);
   else if (projection == 1)
     uv = direction_to_mirrorball(co);
-  else
-    uv = direction_to_cubemap(co);
+  else {
+    uint layout = flags >> 4;
+    uv = direction_to_cubemap(co, layout);
+  }
 
   float4 f = svm_image_texture(kg, id, uv.x, uv.y, flags);
 
