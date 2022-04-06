@@ -201,6 +201,8 @@ ccl_device float2 direction_to_mirrorball(float3 dir)
   return make_float2(u, v);
 }
 
+/* Cubemap projection */
+
 ccl_device void cubemap_projection(float3 co, float& u, float& v, float& maxAxis, int& index)
 {
   // TODO credit copy & paste from wikipedia
@@ -256,12 +258,8 @@ ccl_device void cubemap_projection(float3 co, float& u, float& v, float& maxAxis
   }
 }
 
-ccl_device float2 direction_to_cubemap(float3 dir)
+ccl_device float2 direction_to_cubemap_cross_horizontal(float uc, float vc, float maxAxis, int index)
 {
-  float maxAxis, uc, vc;
-  int index = -1;
-
-  cubemap_projection(dir, uc, vc, maxAxis, index);
   // Convert u range from -1 to 1 to 0 to 0.25 (1/4) as the texture space is 4 faces wide
   float u = 0.125f * (uc / maxAxis + 1.0f);
   // Convert v range from -1 to 1 to 0 to 0.333.. (1/3) as the texture space is 3 faces high
@@ -300,6 +298,93 @@ ccl_device float2 direction_to_cubemap(float3 dir)
   }
 
   return make_float2(u, v);
+}
+
+ccl_device float2 direction_to_cubemap_stripe_horizontal(float uc, float vc, float maxAxis, int index)
+{
+  // Convert u range from -1 to 1 to 0 to 0.166667 (1/6) as the texture space is 6 faces wide
+  float u = 0.083333f * (uc / maxAxis + 1.0f);
+  // Convert v range from -1 to 1 to 0 to 1 as the texture space is 1 face high
+  float v = 0.5f * (vc / maxAxis + 1.0f);
+
+  // Some coordinates are reordered to take Blender's internal transform system into account
+  // while we offset the uv coordinate to the right face.
+  switch (index) {
+  case 0:
+    break;
+  case 1:
+    u += 0.166666;
+    break;
+  case 2:
+    // -Z
+    u += 0.166666 * 5;
+    break;
+  case 3:
+    // Z
+    u += 0.166666 * 4;
+    break;
+  case 4:
+    // Y
+    u += 0.166666 * 2;
+    break;
+  case 5:
+    // -Y
+    u += 0.166666 * 3;
+    break;
+  }
+
+  return make_float2(u, v);
+}
+
+ccl_device float2 direction_to_cubemap_stripe_vertical(float uc, float vc, float maxAxis, int index)
+{
+  // Convert v range from -1 to 1 to 0 to 1 as the texture space is 1 face high
+  float u = 0.5f * (uc / maxAxis + 1.0f);
+  // Convert u range from -1 to 1 to 0 to 0.166667 (1/6) as the texture space is 6 faces high
+  float v = 0.083333f * (vc / maxAxis + 1.0f);
+
+  // Some coordinates are reordered to take Blender's internal transform system into account
+  // while we offset the uv coordinate to the right face.
+  switch (index) {
+  case 0:
+    break;
+  case 1:
+    v += 0.166666;
+    break;
+  case 2:
+    // -Z
+    v += 0.166666 * 5;
+    break;
+  case 3:
+    // Z
+    v += 0.166666 * 4;
+    break;
+  case 4:
+    // Y
+    v += 0.166666 * 2;
+    break;
+  case 5:
+    // -Y
+    v += 0.166666 * 3;
+    break;
+  }
+
+  return make_float2(u, 1.0f-v);
+}
+
+ccl_device float2 direction_to_cubemap(float3 dir, int layout)
+{
+  float maxAxis, uc, vc;
+  int index = -1;
+
+  cubemap_projection(dir, uc, vc, maxAxis, index);
+
+  if (layout == NODE_ENVIRONMENT_CROSS_HORIZONTAL)
+    return direction_to_cubemap_cross_horizontal(uc, vc, maxAxis, index);
+  else if (layout == NODE_ENVIRONMENT_STRIPE_HORIZONTAL)
+    return direction_to_cubemap_stripe_horizontal(uc, vc, maxAxis, index);
+  else
+    return direction_to_cubemap_stripe_vertical(uc, vc, maxAxis, index);
 }
 
 ccl_device_inline float3 panorama_to_direction(ccl_constant KernelCamera *cam, float u, float v)

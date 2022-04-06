@@ -116,6 +116,62 @@ vector environment_texture_cubemap_cross_horizontal(float uc, float vc, float ma
    return vector(u, v, 0.0);
 }
 
+vector environment_texture_cubemap_stripe_horizontal(float uc, float vc, float maxAxis, int index)
+{
+  // Convert u range from -1 to 1 to 0 to 0.166667 (1/6) as the texture space is 6 faces wide
+  float u = 0.083333 * (uc / maxAxis + 1.0);
+  // Convert v range from -1 to 1 to 0 to 1 as the texture space is 1 face high
+  float v = 0.5 * (vc / maxAxis + 1.0);
+
+  // Some coordinates are reordered to take Blender's internal transform system into account
+  // while we offset the uv coordinate to the right face.
+  if (index == 1) {
+    u += 0.166666;
+  } else if (index == 2) {
+    // -Z
+    u += 0.166666 * 5;
+  } else if (index == 3) {
+    // Z
+    u += 0.166666 * 4;
+  } else if (index == 4) {
+    // Y
+    u += 0.166666 * 2;
+  } else if (index == 5) {
+    // -Y
+    u += 0.166666 * 3;
+  }
+
+   return vector(u, v, 0.0);
+}
+
+vector environment_texture_cubemap_stripe_vertical(float uc, float vc, float maxAxis, int index) 
+{
+  // Convert v range from -1 to 1 to 0 to 1 as the texture space is 1 face high
+  float u = 0.5 * (uc / maxAxis + 1.0);
+  // Convert u range from -1 to 1 to 0 to 0.166667 (1/6) as the texture space is 6 faces high
+  float v = 0.083333 * (vc / maxAxis + 1.0);
+
+  // Some coordinates are reordered to take Blender's internal transform system into account
+  // while we offset the uv coordinate to the right face.
+  if (index == 1) {
+    v += 0.166666;
+  } else if (index == 2) {
+    // -Z
+    v += 0.166666 * 5;
+  } else if (index == 3) {
+    // Z
+    v += 0.166666 * 4;
+  } else if (index == 4) {
+    // Y
+    v += 0.166666 * 2;
+  } else if (index == 5) {
+    // -Y
+    v += 0.166666 * 3;
+  }
+
+   return vector(u, 1.0-v, 0.0);
+}
+
 vector environment_texture_direction_to_cubemap(vector dir, string cubemap_layout)
 {
   float maxAxis, uc, vc;
@@ -123,8 +179,12 @@ vector environment_texture_direction_to_cubemap(vector dir, string cubemap_layou
 
   environment_texture_cubemap_projection(dir, uc, vc, maxAxis, index);
 
-  //if (cubemap_layout == "cross_horizontal")
+  if (cubemap_layout == "cross_horizontal")
     return environment_texture_cubemap_cross_horizontal(uc, vc, maxAxis, index);
+  else if (cubemap_layout == "stripe_horizontal")
+    return environment_texture_cubemap_stripe_horizontal(uc, vc, maxAxis, index);
+  else
+    return environment_texture_cubemap_stripe_vertical(uc, vc, maxAxis, index);
 }
 
 shader node_environment_texture(
