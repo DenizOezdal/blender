@@ -72,10 +72,14 @@ static int node_shader_gpu_tex_environment(GPUMaterial *mat,
   }
   else {
     if (tex->cubemap_layout == SHD_CBLT_CROSS_HORIZONTAL) {
+      /* A cubemap unfolded to a cross and repeated horizontally and vertically
+       * will have continuity along the sides when crossing the image border
+       * which can be made use of to have smoother samples across some faces. */
       sampler &= GPU_SAMPLER_REPEAT;
       GPU_link(mat, "node_tex_environment_cubemap_cross_horizontal", in[0].link, &in[0].link);
     }
     else if (tex->cubemap_layout == SHD_CBLT_STRIPE_HORIZONTAL) {
+      /* We clamp to border color to help with cubic interpolation potentially causing seams. */
       sampler &= GPU_SAMPLER_CLAMP_BORDER;
       GPU_link(mat, "node_tex_environment_cubemap_stripe_horizontal", in[0].link, &in[0].link);
     }
