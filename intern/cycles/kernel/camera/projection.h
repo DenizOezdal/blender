@@ -374,7 +374,9 @@ ccl_device float2 direction_to_cubemap_stripe_vertical(float uc, float vc, float
 
 ccl_device float2 direction_to_cubemap(float3 dir, int layout)
 {
-  float maxAxis, uc, vc;
+  float maxAxis = 0.0;
+  float uc = 0.0;
+  float vc = 0.0;
   int index = -1;
 
   cubemap_projection(dir, uc, vc, maxAxis, index);

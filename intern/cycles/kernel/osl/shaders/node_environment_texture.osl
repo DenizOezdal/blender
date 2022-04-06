@@ -38,42 +38,48 @@ void environment_texture_cubemap_projection(vector dir, output float u, output f
   int isZPositive = dir.z > 0 ? 1 : 0;
 
    // POSITIVE X
-  if (isXPositive && absX >= absY && absX >= absZ) {
+  if (isXPositive && absX >= absY && absX >= absZ) 
+  {
     maxAxis = absX;
     u = dir.y;
     v = dir.z;
     index = 0;
   }
   // NEGATIVE X
-  if (!isXPositive && absX >= absY && absX >= absZ) {
+  if (!isXPositive && absX >= absY && absX >= absZ) 
+  {
     maxAxis = absX;
     u = -dir.y;
     v = dir.z;
     index = 1;
   }
   // POSITIVE Y
-  if (isYPositive && absY >= absX && absY >= absZ) {
+  if (isYPositive && absY >= absX && absY >= absZ) 
+  {
     maxAxis = absY;
     u = -dir.x;
     v = dir.z;
     index = 2;
   }
   // NEGATIVE Y
-  if (!isYPositive && absY >= absX && absY >= absZ) {
+  if (!isYPositive && absY >= absX && absY >= absZ) 
+  {
     maxAxis = absY;
     u = dir.x;
     v = dir.z;
     index = 3;
   }
   // POSITIVE Z
-  if (isZPositive && absZ >= absX && absZ >= absY) {
+  if (isZPositive && absZ >= absX && absZ >= absY) 
+  {
     maxAxis = absZ;
     u = dir.x;
     v = dir.y;
     index = 4;
   }
   // NEGATIVE Z
-  if (!isZPositive && absZ >= absX && absZ >= absY) {
+  if (!isZPositive && absZ >= absX && absZ >= absY) 
+  {
     maxAxis = absZ;
     u = dir.x;
     v = dir.y;
@@ -90,24 +96,35 @@ vector environment_texture_cubemap_cross_horizontal(float uc, float vc, float ma
 
   // Some coordinates are reordered to take Blender's internal transform system into account
   // while we offset the uv coordinate to the right face.
-  if(index == 0) {
+  if(index == 0) 
+  {
     u += 0.5;
     v += 0.333333;
-  } else if (index == 1) {
+  }
+  else if (index == 1) 
+  {
     v += 0.333333;
-  } else if (index == 2) {
+  }
+  else if (index == 2) 
+  {
     // -Z
     u += 0.75;
     v += 0.333333;
-  } else if (index == 3) {
+  }
+  else if (index == 3)
+  {
     // Z
     u += 0.25;
     v += 0.333333;
-  } else if (index == 4) {
+  } 
+  else if (index == 4)
+  {
     // Y
     u += 0.25;
     v += 0.666666;
-  } else if (index == 5) {
+  } 
+  else if (index == 5)
+  {
     // -Y
     u += 0.25;
     v = 0.333333 - v;
@@ -125,21 +142,20 @@ vector environment_texture_cubemap_stripe_horizontal(float uc, float vc, float m
 
   // Some coordinates are reordered to take Blender's internal transform system into account
   // while we offset the uv coordinate to the right face.
-  if (index == 1) {
+  if (index == 1)
     u += 0.166666;
-  } else if (index == 2) {
+  else if (index == 2)
     // -Z
     u += 0.166666 * 5;
-  } else if (index == 3) {
+  else if (index == 3)
     // Z
     u += 0.166666 * 4;
-  } else if (index == 4) {
+  else if (index == 4)
     // Y
     u += 0.166666 * 2;
-  } else if (index == 5) {
+  else if (index == 5)
     // -Y
     u += 0.166666 * 3;
-  }
 
    return vector(u, v, 0.0);
 }
@@ -153,28 +169,29 @@ vector environment_texture_cubemap_stripe_vertical(float uc, float vc, float max
 
   // Some coordinates are reordered to take Blender's internal transform system into account
   // while we offset the uv coordinate to the right face.
-  if (index == 1) {
+  if (index == 1)
     v += 0.166666;
-  } else if (index == 2) {
+  else if (index == 2)
     // -Z
     v += 0.166666 * 5;
-  } else if (index == 3) {
+  else if (index == 3)
     // Z
     v += 0.166666 * 4;
-  } else if (index == 4) {
+  else if (index == 4)
     // Y
     v += 0.166666 * 2;
-  } else if (index == 5) {
+  else if (index == 5)
     // -Y
     v += 0.166666 * 3;
-  }
 
    return vector(u, 1.0-v, 0.0);
 }
 
 vector environment_texture_direction_to_cubemap(vector dir, string cubemap_layout)
 {
-  float maxAxis, uc, vc;
+  float maxAxis = 0.0;
+  float uc = 0.0;
+  float vc = 0.0;
   int index = -1;
 
   environment_texture_cubemap_projection(dir, uc, vc, maxAxis, index);
