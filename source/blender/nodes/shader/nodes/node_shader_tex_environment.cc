@@ -72,12 +72,15 @@ static int node_shader_gpu_tex_environment(GPUMaterial *mat,
   }
   else {
     if (tex->cubemap_layout == SHD_CBLT_CROSS_HORIZONTAL) {
+      sampler &= GPU_SAMPLER_REPEAT;
       GPU_link(mat, "node_tex_environment_cubemap_cross_horizontal", in[0].link, &in[0].link);
     }
     else if (tex->cubemap_layout == SHD_CBLT_STRIPE_HORIZONTAL) {
+      sampler &= GPU_SAMPLER_CLAMP_BORDER;
       GPU_link(mat, "node_tex_environment_cubemap_stripe_horizontal", in[0].link, &in[0].link);
     }
     else {
+      sampler &= GPU_SAMPLER_CLAMP_BORDER;
       GPU_link(mat, "node_tex_environment_cubemap_stripe_vertical", in[0].link, &in[0].link);
     }
   }
