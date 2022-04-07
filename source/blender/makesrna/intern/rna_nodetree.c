@@ -5247,31 +5247,30 @@ static void def_sh_tex_environment(StructRNA *srna)
        0,
        "Mirror Ball",
        "Projection from an orthographic photo of a mirror ball"},
-      {SHD_PROJ_CUBEMAP,
-       "CUBEMAP",
-       0,
-       "Cubemap",
-       "Projection from a cubemap"},
+      {SHD_PROJ_CUBEMAP, "CUBEMAP", 0, "Cubemap", "Projection from a cubemap"},
       {0, NULL, 0, NULL, NULL},
   };
 
   static const EnumPropertyItem prop_cubemap_layout_items[] = {
-    {SHD_CUBE_CROSS_HORIZONTAL,
-     "CROSS_HORIZONTAL",
-     0,
-     "Horizontal Cross",
-     "Projection from a cubemap in a horizontal cross layout with the centre face pointing forward."},
-    {SHD_CUBE_STRIPE_HORIZONTAL,
-     "STRIPE_HORIZONTAL",
-     0,
-     "Horizontal Stripe",
-     "Projection from horizontally arranged cubemap faces in the following order: right, left, up, down, front, back."},
-    {SHD_CUBE_STRIPE_VERTICAL,
-     "STRIPE_VERTICAL",
-     0,
-     "Vertical Stripe",
-     "Projection from vertically arranged cubemap faces in the following order: right, left, up, down, front, back."},
-    {0, NULL, 0, NULL, NULL},
+      {SHD_CUBE_CROSS_HORIZONTAL,
+       "CROSS_HORIZONTAL",
+       0,
+       "Horizontal Cross",
+       "Projection from a cubemap in a horizontal cross layout with the centre face pointing "
+       "forward."},
+      {SHD_CUBE_STRIPE_HORIZONTAL,
+       "STRIPE_HORIZONTAL",
+       0,
+       "Horizontal Stripe",
+       "Projection from horizontally arranged cubemap faces in the following order: right, left, "
+       "up, down, front, back."},
+      {SHD_CUBE_STRIPE_VERTICAL,
+       "STRIPE_VERTICAL",
+       0,
+       "Vertical Stripe",
+       "Projection from vertically arranged cubemap faces in the following order: right, left, "
+       "up, down, front, back."},
+      {0, NULL, 0, NULL, NULL},
   };
 
   PropertyRNA *prop;
