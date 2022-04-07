@@ -79,7 +79,7 @@ static int node_shader_gpu_tex_environment(GPUMaterial *mat,
       GPU_link(mat, "node_tex_environment_cubemap_cross_horizontal", in[0].link, &in[0].link);
     }
     else if (tex->cubemap_layout == SHD_CUBE_STRIPE_HORIZONTAL) {
-      /* To help with cubic interpolation potentially causing seams the coordinates are clamped to border. */
+      /* To help with seam issues caused by interpolation coordinates are clamped to the border. */
       sampler &= GPU_SAMPLER_CLAMP_BORDER;
       GPU_link(mat, "node_tex_environment_cubemap_stripe_horizontal", in[0].link, &in[0].link);
     }

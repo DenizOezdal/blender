@@ -203,7 +203,7 @@ ccl_device float2 direction_to_mirrorball(float3 dir)
 
 /* Cubemap projection <-> Cartesion direction */
 
-ccl_device void cubemap_xyz_to_uv(float3 co, float& u, float& v, float& maxAxis, int& index)
+ccl_device void cubemap_xyz_to_uv(float3 co, float &u, float &v, float &maxAxis, int &index)
 {
   float absX = std::fabs(co.x);
   float absY = std::fabs(co.y);
@@ -257,37 +257,31 @@ ccl_device float2 cubemap_uv_cross_horizontal(float uc, float vc, float maxAxis,
   float v = 0.166667f * (vc / maxAxis + 1.0f);
 
   switch (index) {
-    case 0:
-    {
+    case 0: {
       u += 0.5f;
       v += 0.333333f;
       break;
     }
-    case 1:
-    {
+    case 1: {
       v += 0.333333f;
       break;
     }
-    case 2:
-    {
+    case 2: {
       u += 0.75f;
       v += 0.333333f;
       break;
     }
-    case 3:
-    {
+    case 3: {
       u += 0.25f;
       v += 0.333333f;
       break;
     }
-    case 4:
-    {
+    case 4: {
       u += 0.25f;
       v += 0.666666f;
       break;
     }
-    case 5:
-    {
+    case 5: {
       u += 0.25f;
       v = 0.333333f - v;
       break;
@@ -303,28 +297,23 @@ ccl_device float2 cubemap_uv_stripe_horizontal(float uc, float vc, float maxAxis
   float v = 0.5f * (vc / maxAxis + 1.0f);
 
   switch (index) {
-    case 1:
-    {
+    case 1: {
       u += 0.166666f;
       break;
     }
-    case 2:
-    {
+    case 2: {
       u += 0.166666f * 5;
       break;
     }
-    case 3:
-    {
+    case 3: {
       u += 0.166666f * 4;
       break;
     }
-    case 4:
-    {
+    case 4: {
       u += 0.166666f * 2;
       break;
     }
-    case 5:
-    {
+    case 5: {
       u += 0.166666f * 3;
       break;
     }
@@ -339,34 +328,29 @@ ccl_device float2 cubemap_uv_stripe_vertical(float uc, float vc, float maxAxis, 
   float v = 0.083333f * (vc / maxAxis + 1.0f);
 
   switch (index) {
-    case 1:
-    {
+    case 1: {
       v += 0.166666f;
       break;
     }
-    case 2:
-    {
+    case 2: {
       v += 0.166666f * 5;
       break;
     }
-    case 3:
-    {
+    case 3: {
       v += 0.166666f * 4;
       break;
     }
-    case 4:
-    {
+    case 4: {
       v += 0.166666f * 2;
       break;
     }
-    case 5:
-    {
+    case 5: {
       v += 0.166666f * 3;
       break;
     }
   }
 
-  return make_float2(u, 1.0f-v);
+  return make_float2(u, 1.0f - v);
 }
 
 ccl_device float2 direction_to_cubemap(float3 dir, int layout)
