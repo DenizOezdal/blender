@@ -17,7 +17,7 @@ static void node_shader_init_tex_environment(bNodeTree *UNUSED(ntree), bNode *no
   BKE_texture_mapping_default(&tex->base.tex_mapping, TEXMAP_TYPE_POINT);
   BKE_texture_colormapping_default(&tex->base.color_mapping);
   tex->projection = SHD_PROJ_EQUIRECTANGULAR;
-  tex->cubemap_layout = SHD_CBLT_CROSS_HORIZONTAL;
+  tex->cubemap_layout = SHD_CUBE_CROSS_HORIZONTAL;
   BKE_imageuser_default(&tex->iuser);
 
   node->storage = tex;
@@ -71,15 +71,15 @@ static int node_shader_gpu_tex_environment(GPUMaterial *mat,
     sampler &= ~GPU_SAMPLER_REPEAT;
   }
   else {
-    if (tex->cubemap_layout == SHD_CBLT_CROSS_HORIZONTAL) {
-      /* A cubemap unfolded to a cross and repeated horizontally and vertically
-       * will have continuity along the sides when crossing the image border
-       * which can be made use of to have smoother samples across some faces. */
+    if (tex->cubemap_layout == SHD_CUBE_CROSS_HORIZONTAL) {
+      /* An unfolded cube in a cross layout (aka net) will have correct tiling
+       * of its faces when repeatedly placed in a horizontal and vertical fashion.
+       * This is useful to minimize artifacts along the seams of the bordering faces. */
       sampler &= GPU_SAMPLER_REPEAT;
       GPU_link(mat, "node_tex_environment_cubemap_cross_horizontal", in[0].link, &in[0].link);
     }
-    else if (tex->cubemap_layout == SHD_CBLT_STRIPE_HORIZONTAL) {
-      /* We clamp to border color to help with cubic interpolation potentially causing seams. */
+    else if (tex->cubemap_layout == SHD_CUBE_STRIPE_HORIZONTAL) {
+      /* To help with cubic interpolation potentially causing seams the coordinates are clamped to border. */
       sampler &= GPU_SAMPLER_CLAMP_BORDER;
       GPU_link(mat, "node_tex_environment_cubemap_stripe_horizontal", in[0].link, &in[0].link);
     }
