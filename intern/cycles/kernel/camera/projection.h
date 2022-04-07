@@ -203,7 +203,7 @@ ccl_device float2 direction_to_mirrorball(float3 dir)
 
 /* Cubemap projection <-> Cartesion direction */
 
-ccl_device void cubemap_projection(float3 co, float& u, float& v, float& maxAxis, int& index)
+ccl_device void cubemap_xyz_to_uv(float3 co, float& u, float& v, float& maxAxis, int& index)
 {
   float absX = std::fabs(co.x);
   float absY = std::fabs(co.y);
@@ -213,43 +213,37 @@ ccl_device void cubemap_projection(float3 co, float& u, float& v, float& maxAxis
   bool isYPositive = co.y > 0 ? true : false;
   bool isZPositive = co.z > 0 ? true : false;
 
-  if (isXPositive && absX >= absY && absX >= absZ)
-  {
+  if (isXPositive && absX >= absY && absX >= absZ) {
     maxAxis = absX;
     u = co.y;
     v = co.z;
     index = 0;
   }
-  if (!isXPositive && absX >= absY && absX >= absZ)
-  {
+  if (!isXPositive && absX >= absY && absX >= absZ) {
     maxAxis = absX;
     u = -co.y;
     v = co.z;
     index = 1;
   }
-  if (isYPositive && absY >= absX && absY >= absZ)
-  {
+  if (isYPositive && absY >= absX && absY >= absZ) {
     maxAxis = absY;
     u = -co.x;
     v = co.z;
     index = 2;
   }
-  if (!isYPositive && absY >= absX && absY >= absZ)
-  {
+  if (!isYPositive && absY >= absX && absY >= absZ) {
     maxAxis = absY;
     u = co.x;
     v = co.z;
     index = 3;
   }
-  if (isZPositive && absZ >= absX && absZ >= absY)
-  {
+  if (isZPositive && absZ >= absX && absZ >= absY) {
     maxAxis = absZ;
     u = co.x;
     v = co.y;
     index = 4;
   }
-  if (!isZPositive && absZ >= absX && absZ >= absY)
-  {
+  if (!isZPositive && absZ >= absX && absZ >= absY) {
     maxAxis = absZ;
     u = co.x;
     v = co.y;
@@ -382,7 +376,7 @@ ccl_device float2 direction_to_cubemap(float3 dir, int layout)
   float vc = 0.0;
   int index = -1;
 
-  cubemap_projection(dir, uc, vc, maxAxis, index);
+  cubemap_xyz_to_uv(dir, uc, vc, maxAxis, index);
 
   if (layout == NODE_ENVIRONMENT_CROSS_HORIZONTAL)
     return cubemap_uv_cross_horizontal(uc, vc, maxAxis, index);
