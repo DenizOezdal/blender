@@ -177,6 +177,7 @@ void node_tex_environment_cubemap_stripe_horizontal(vec3 co, out vec3 uv)
     case 5:
     {
       u += 0.166666 * 3;
+      v = 1.0 - v;
       break;
     }
   }
@@ -197,35 +198,35 @@ void node_tex_environment_cubemap_stripe_vertical(vec3 co, out vec3 uv)
   float v = 0.083333 * (vc / maxAxis + 1.0);
 
   switch(index) {
-    case 1:
-    {
-      v += 0.166666;
-      break;
-    }
-    case 2:
+    case 0:
     {
       v += 0.166666 * 5;
       break;
     }
-    case 3:
+    case 1:
     {
       v += 0.166666 * 4;
       break;
     }
+    case 3:
+    {
+      v += 0.166666;
+      break;
+    }
     case 4:
     {
-      v += 0.166666 * 2;
+      v += 0.166666 * 3;
       break;
     }
     case 5:
     {
-      v += 0.166666 * 3;
+      v = 0.166666 * 3 - v;
       break;
     }
   }
 
   uv.x = u;
-  uv.y = 1.0 - v;
+  uv.y = v;
 }
 
 void node_tex_environment_empty(vec3 co, out vec4 color)
