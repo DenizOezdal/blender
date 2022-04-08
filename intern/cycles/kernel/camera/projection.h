@@ -315,6 +315,7 @@ ccl_device float2 cubemap_uv_stripe_horizontal(float uc, float vc, float maxAxis
     }
     case 5: {
       u += 0.166666f * 3;
+      v = 1.0f - v;
       break;
     }
   }
@@ -328,29 +329,29 @@ ccl_device float2 cubemap_uv_stripe_vertical(float uc, float vc, float maxAxis, 
   float v = 0.083333f * (vc / maxAxis + 1.0f);
 
   switch (index) {
-    case 1: {
-      v += 0.166666f;
-      break;
-    }
-    case 2: {
+    case 0: {
       v += 0.166666f * 5;
       break;
     }
-    case 3: {
+    case 1: {
       v += 0.166666f * 4;
       break;
     }
+    case 3: {
+      v += 0.166666f;
+      break;
+    }
     case 4: {
-      v += 0.166666f * 2;
+      v += 0.166666f * 3;
       break;
     }
     case 5: {
-      v += 0.166666f * 3;
+      v = 0.166666f * 3 - v;
       break;
     }
   }
 
-  return make_float2(u, 1.0f - v);
+  return make_float2(u, v);
 }
 
 ccl_device float2 direction_to_cubemap(float3 dir, int layout)

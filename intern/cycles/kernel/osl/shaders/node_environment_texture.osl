@@ -120,8 +120,10 @@ vector environment_texture_cubemap_stripe_horizontal(float uc, float vc, float m
     u += 0.166666 * 4;
   else if (index == 4)
     u += 0.166666 * 2;
-  else if (index == 5)
+  else if (index == 5) {
     u += 0.166666 * 3;
+    v = 1.0 - v;
+  }
 
    return vector(u, v, 0.0);
 }
@@ -131,18 +133,18 @@ vector environment_texture_cubemap_stripe_vertical(float uc, float vc, float max
   float u = 0.5 * (uc / maxAxis + 1.0);
   float v = 0.083333 * (vc / maxAxis + 1.0);
 
-  if (index == 1)
-    v += 0.166666;
-  else if (index == 2)
+  if (index == 0)
     v += 0.166666 * 5;
-  else if (index == 3)
+  else if (index == 1)
     v += 0.166666 * 4;
+  else if (index == 3)
+    v += 0.166666;
   else if (index == 4)
-    v += 0.166666 * 2;
-  else if (index == 5)
     v += 0.166666 * 3;
+  else if (index == 5)
+    v = 0.166666 * 3 - v;
 
-   return vector(u, 1.0-v, 0.0);
+   return vector(u, v, 0.0);
 }
 
 vector environment_texture_direction_to_cubemap(vector dir, string cubemap_layout)
