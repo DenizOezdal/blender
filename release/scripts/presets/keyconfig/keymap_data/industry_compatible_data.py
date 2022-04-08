@@ -564,9 +564,9 @@ def km_uv_editor(params):
          {"properties": [("type", 'ISLAND')]}),
 
         ("uv.select", {"type": 'LEFTMOUSE', "value": 'CLICK'},
-         {"properties": [("extend", False), ("deselect_all", True)]}),
+         {"properties": [("deselect_all", True)]}),
         ("uv.select", {"type": 'LEFTMOUSE', "value": 'CLICK', "shift": True},
-         {"properties": [("extend", True), ("deselect_all", False)]}),
+         {"properties": [("toggle", True), ("deselect_all", False)]}),
 
         ("transform.translate", {"type": 'LEFTMOUSE', "value": 'CLICK_DRAG'}, None),
         ("uv.select_loop", {"type": 'LEFTMOUSE', "value": 'DOUBLE_CLICK', "shift": True},
@@ -1862,6 +1862,22 @@ def km_sequencerpreview(params):
         ("sequencer.sample", {"type": 'LEFTMOUSE', "value": 'PRESS'}, None),
     ])
 
+    return keymap
+
+
+def km_sequencer_channels(params):
+    items = []
+    keymap = (
+        "Sequencer Channels",
+        {"space_type": 'SEQUENCE_EDITOR', "region_type": 'WINDOW'},
+        {"items": items},
+    )
+
+    items.extend([
+        # Rename.
+        ("sequencer.rename_channel", {"type": 'LEFTMOUSE', "value": 'PRESS', "ctrl": True}, None),
+        ("sequencer.rename_channel", {"type": 'LEFTMOUSE', "value": 'DOUBLE_CLICK'}, None),
+        ])
     return keymap
 
 
@@ -4090,6 +4106,7 @@ def generate_keymaps_impl(params=None):
         km_sequencercommon(params),
         km_sequencer(params),
         km_sequencerpreview(params),
+        km_sequencer_channels(params),
         km_console(params),
         km_clip(params),
         km_clip_editor(params),

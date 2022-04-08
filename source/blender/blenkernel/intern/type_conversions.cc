@@ -18,7 +18,11 @@ static void add_implicit_conversion(DataTypeConversions &conversions)
   static const CPPType &to_type = CPPType::get<To>();
   static const std::string conversion_name = from_type.name() + " to " + to_type.name();
 
-  static fn::CustomMF_SI_SO<From, To> multi_function{conversion_name.c_str(), ConversionF};
+  static fn::CustomMF_SI_SO<From, To> multi_function{
+      conversion_name.c_str(),
+      /* Use lambda instead of passing #ConversionF directly, because otherwise the compiler won't
+         inline the function. */
+      [](const From &a) { return ConversionF(a); }};
   static auto convert_single_to_initialized = [](const void *src, void *dst) {
     *(To *)dst = ConversionF(*(const From *)src);
   };
@@ -288,8 +292,7 @@ void DataTypeConversions::convert_to_uninitialized(const CPPType &from_type,
   functions->convert_single_to_uninitialized(from_value, to_value);
 }
 
-void DataTypeConversions::convert_to_initialized_n(fn::GSpan from_span,
-                                                   fn::GMutableSpan to_span) const
+void DataTypeConversions::convert_to_initialized_n(GSpan from_span, GMutableSpan to_span) const
 {
   const CPPType &from_type = from_span.type();
   const CPPType &to_type = to_span.type();
@@ -305,19 +308,17 @@ void DataTypeConversions::convert_to_initialized_n(fn::GSpan from_span,
   fn->call_auto(IndexRange(from_span.size()), params, context);
 }
 
-class GVArray_For_ConvertedGVArray : public fn::GVArrayImpl {
+class GVArray_For_ConvertedGVArray : public GVArrayImpl {
  private:
-  fn::GVArray varray_;
+  GVArray varray_;
   const CPPType &from_type_;
   ConversionFunctions old_to_new_conversions_;
 
  public:
-  GVArray_For_ConvertedGVArray(fn::GVArray varray,
+  GVArray_For_ConvertedGVArray(GVArray varray,
                                const CPPType &to_type,
                                const DataTypeConversions &conversions)
-      : fn::GVArrayImpl(to_type, varray.size()),
-        varray_(std::move(varray)),
-        from_type_(varray_.type())
+      : GVArrayImpl(to_type, varray.size()), varray_(std::move(varray)), from_type_(varray_.type())
   {
     old_to_new_conversions_ = *conversions.get_conversion_functions(from_type_, to_type);
   }
@@ -340,18 +341,18 @@ class GVArray_For_ConvertedGVArray : public fn::GVArrayImpl {
   }
 };
 
-class GVMutableArray_For_ConvertedGVMutableArray : public fn::GVMutableArrayImpl {
+class GVMutableArray_For_ConvertedGVMutableArray : public GVMutableArrayImpl {
  private:
-  fn::GVMutableArray varray_;
+  GVMutableArray varray_;
   const CPPType &from_type_;
   ConversionFunctions old_to_new_conversions_;
   ConversionFunctions new_to_old_conversions_;
 
  public:
-  GVMutableArray_For_ConvertedGVMutableArray(fn::GVMutableArray varray,
+  GVMutableArray_For_ConvertedGVMutableArray(GVMutableArray varray,
                                              const CPPType &to_type,
                                              const DataTypeConversions &conversions)
-      : fn::GVMutableArrayImpl(to_type, varray.size()),
+      : GVMutableArrayImpl(to_type, varray.size()),
         varray_(std::move(varray)),
         from_type_(varray_.type())
   {
@@ -384,7 +385,7 @@ class GVMutableArray_For_ConvertedGVMutableArray : public fn::GVMutableArrayImpl
   }
 };
 
-fn::GVArray DataTypeConversions::try_convert(fn::GVArray varray, const CPPType &to_type) const
+GVArray DataTypeConversions::try_convert(GVArray varray, const CPPType &to_type) const
 {
   const CPPType &from_type = varray.type();
   if (from_type == to_type) {
@@ -393,11 +394,11 @@ fn::GVArray DataTypeConversions::try_convert(fn::GVArray varray, const CPPType &
   if (!this->is_convertible(from_type, to_type)) {
     return {};
   }
-  return fn::GVArray::For<GVArray_For_ConvertedGVArray>(std::move(varray), to_type, *this);
+  return GVArray::For<GVArray_For_ConvertedGVArray>(std::move(varray), to_type, *this);
 }
 
-fn::GVMutableArray DataTypeConversions::try_convert(fn::GVMutableArray varray,
-                                                    const CPPType &to_type) const
+GVMutableArray DataTypeConversions::try_convert(GVMutableArray varray,
+                                                const CPPType &to_type) const
 {
   const CPPType &from_type = varray.type();
   if (from_type == to_type) {
@@ -406,7 +407,7 @@ fn::GVMutableArray DataTypeConversions::try_convert(fn::GVMutableArray varray,
   if (!this->is_convertible(from_type, to_type)) {
     return {};
   }
-  return fn::GVMutableArray::For<GVMutableArray_For_ConvertedGVMutableArray>(
+  return GVMutableArray::For<GVMutableArray_For_ConvertedGVMutableArray>(
       std::move(varray), to_type, *this);
 }
 

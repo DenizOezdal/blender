@@ -199,9 +199,6 @@ typedef struct Image {
   char eye;
   char views_format;
 
-  /** Displayed offset in backdrop for viewer nodes in pixel space. */
-  int display_offset_x, display_offset_y;
-
   /* ImageTile list for UDIMs. */
   int active_tile_index;
   ListBase tiles;
@@ -215,7 +212,7 @@ typedef struct Image {
 
 /* **************** IMAGE ********************* */
 
-/* Image.flag */
+/** #Image.flag */
 enum {
   IMA_HIGH_BITDEPTH = (1 << 0),
   IMA_FLAG_UNUSED_1 = (1 << 1), /* cleared */
@@ -238,7 +235,7 @@ enum {
   IMA_FLAG_UNUSED_16 = (1 << 16), /* cleared */
 };
 
-/* Image.gpuflag */
+/** #Image.gpuflag */
 enum {
   /** All mipmap levels in OpenGL texture set? */
   IMA_GPU_MIPMAP_COMPLETE = (1 << 0),
@@ -271,7 +268,7 @@ typedef enum eImageType {
   IMA_TYPE_COMPOSITE = 5,
 } eImageType;
 
-/* Image.gen_type */
+/** #Image.gen_type */
 enum {
   IMA_GENTYPE_BLANK = 0,
   IMA_GENTYPE_GRID = 1,
@@ -281,12 +278,12 @@ enum {
 /* render */
 #define IMA_MAX_RENDER_TEXT (1 << 9)
 
-/* Image.gen_flag */
+/** #Image.gen_flag */
 enum {
   IMA_GEN_FLOAT = 1,
 };
 
-/* Image.alpha_mode */
+/** #Image.alpha_mode */
 enum {
   IMA_ALPHA_STRAIGHT = 0,
   IMA_ALPHA_PREMUL = 1,

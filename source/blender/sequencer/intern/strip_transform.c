@@ -17,6 +17,7 @@
 #include "BKE_sound.h"
 
 #include "SEQ_animation.h"
+#include "SEQ_channels.h"
 #include "SEQ_effects.h"
 #include "SEQ_iterator.h"
 #include "SEQ_relations.h"
@@ -298,7 +299,7 @@ static int shuffle_seq_time_offset_test(SeqCollection *strips_to_shuffle,
       }
       if (UNLIKELY(SEQ_collection_has_strip(seq_other, strips_to_shuffle))) {
         CLOG_WARN(&LOG,
-                  "Strip overlaps with itself or another strip, that is to be shuffled."
+                  "Strip overlaps with itself or another strip, that is to be shuffled. "
                   "This should never happen.");
         continue;
       }
@@ -389,6 +390,13 @@ void SEQ_transform_offset_after_frame(Scene *scene,
       }
     }
   }
+}
+
+bool SEQ_transform_is_locked(ListBase *channels, Sequence *seq)
+{
+  SeqTimelineChannel *channel = SEQ_channel_get_by_index(channels, seq->machine);
+  return seq->flag & SEQ_LOCK ||
+         (SEQ_channel_is_locked(channel) && ((seq->flag & SEQ_IGNORE_CHANNEL_LOCK) == 0));
 }
 
 void SEQ_image_transform_mirror_factor_get(const Sequence *seq, float r_mirror[2])

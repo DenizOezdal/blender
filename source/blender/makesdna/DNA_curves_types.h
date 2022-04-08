@@ -28,6 +28,7 @@ typedef enum CurveType {
   CURVE_TYPE_BEZIER = 2,
   CURVE_TYPE_NURBS = 3,
 } CurveType;
+#define CURVE_TYPES_NUM 4
 
 typedef enum HandleType {
   /** The handle can be moved anywhere, and doesn't influence the point's other handle. */
@@ -47,6 +48,12 @@ typedef enum KnotsMode {
   NURBS_KNOT_MODE_BEZIER = 2,
   NURBS_KNOT_MODE_ENDPOINT_BEZIER = 3,
 } KnotsMode;
+
+/** Method used to calculate the normals of a curve's evaluated points. */
+typedef enum NormalMode {
+  NORMAL_MODE_Z_UP = 0,
+  NORMAL_MODE_MINIMUM_TWIST = 1,
+} NormalMode;
 
 /**
  * A reusable data structure for geometry consisting of many curves. All control point data is
@@ -138,7 +145,7 @@ typedef struct Curves {
   void *batch_cache;
 } Curves;
 
-/* Curves.flag */
+/** #Curves.flag */
 enum {
   HA_DS_EXPAND = (1 << 0),
 };

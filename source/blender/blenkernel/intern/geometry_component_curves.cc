@@ -9,13 +9,14 @@
 #include "BKE_attribute_math.hh"
 #include "BKE_curve.h"
 #include "BKE_curves.hh"
+#include "BKE_geometry_fields.hh"
 #include "BKE_geometry_set.hh"
 #include "BKE_lib_id.h"
 #include "BKE_spline.hh"
 
 #include "attribute_access_intern.hh"
 
-using blender::fn::GVArray;
+using blender::GVArray;
 
 /* -------------------------------------------------------------------- */
 /** \name Geometry Component Implementation
@@ -127,7 +128,7 @@ const Curve *CurveComponent::get_curve_for_render() const
   }
 
   curve_for_render_ = (Curve *)BKE_id_new_nomain(ID_CU_LEGACY, nullptr);
-  curve_for_render_->curve_eval = curves_to_curve_eval(*curves_).release();
+  curve_for_render_->curve_eval = curves_;
 
   return curve_for_render_;
 }
@@ -236,10 +237,10 @@ int CurveComponent::attribute_domain_size(const AttributeDomain domain) const
   const blender::bke::CurvesGeometry &geometry = blender::bke::CurvesGeometry::wrap(
       curves_->geometry);
   if (domain == ATTR_DOMAIN_POINT) {
-    return geometry.points_size();
+    return geometry.points_num();
   }
   if (domain == ATTR_DOMAIN_CURVE) {
-    return geometry.curves_size();
+    return geometry.curves_num();
   }
   return 0;
 }

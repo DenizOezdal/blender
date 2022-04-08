@@ -761,7 +761,7 @@ typedef struct NodeImageLayer {
   /* index in the Image->layers->passes lists */
   int pass_index DNA_DEPRECATED;
   /* render pass name */
-  /** Amount defined in openexr_multi.h. */
+  /** Amount defined in IMB_openexr.h. */
   char pass_name[64];
 } NodeImageLayer;
 
@@ -1189,7 +1189,7 @@ typedef struct NodeCryptomatte {
 
   /** Legacy attributes */
   /* Number of input sockets. */
-  int num_inputs;
+  int inputs_num;
 
   char _pad[4];
   NodeCryptomatte_Runtime runtime;
@@ -1295,6 +1295,11 @@ typedef struct NodeGeometryMeshCone {
   /* GeometryNodeMeshCircleFillType. */
   uint8_t fill_type;
 } NodeGeometryMeshCone;
+
+typedef struct NodeGeometryMergeByDistance {
+  /* GeometryNodeMergeByDistanceMode. */
+  uint8_t mode;
+} NodeGeometryMergeByDistance;
 
 typedef struct NodeGeometryMeshLine {
   /* GeometryNodeMeshLineMode. */
@@ -2011,6 +2016,11 @@ typedef enum GeometryNodeMeshCircleFillType {
   GEO_NODE_MESH_CIRCLE_FILL_NGON = 1,
   GEO_NODE_MESH_CIRCLE_FILL_TRIANGLE_FAN = 2,
 } GeometryNodeMeshCircleFillType;
+
+typedef enum GeometryNodeMergeByDistanceMode {
+  GEO_NODE_MERGE_BY_DISTANCE_MODE_ALL = 0,
+  GEO_NODE_MERGE_BY_DISTANCE_MODE_CONNECTED = 1,
+} GeometryNodeMergeByDistanceMode;
 
 typedef enum GeometryNodeMeshLineMode {
   GEO_NODE_MESH_LINE_MODE_END_POINTS = 0,

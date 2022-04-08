@@ -6084,7 +6084,7 @@ static void def_sh_vertex_color(StructRNA *srna)
   RNA_def_struct_sdna_from(srna, "NodeShaderVertexColor", "storage");
 
   prop = RNA_def_property(srna, "layer_name", PROP_STRING, PROP_NONE);
-  RNA_def_property_ui_text(prop, "Vertex Color", "Vertex Color");
+  RNA_def_property_ui_text(prop, "Color Attribute", "Color Attribute");
   RNA_def_property_update(prop, NC_NODE | NA_EDITED, "rna_Node_update");
 
   RNA_def_struct_sdna_from(srna, "bNode", NULL);
@@ -9874,6 +9874,32 @@ static void def_geo_mesh_cone(StructRNA *srna)
   RNA_def_property_update(prop, NC_NODE | NA_EDITED, "rna_Node_socket_update");
 }
 
+static void def_geo_merge_by_distance(StructRNA *srna)
+{
+  PropertyRNA *prop;
+
+  static EnumPropertyItem mode_items[] = {
+      {GEO_NODE_MERGE_BY_DISTANCE_MODE_ALL,
+       "ALL",
+       0,
+       "All",
+       "Merge all close selected points, whether or not they are connected"},
+      {GEO_NODE_MERGE_BY_DISTANCE_MODE_CONNECTED,
+       "CONNECTED",
+       0,
+       "Connected",
+       "Only merge mesh vertices along existing edges. This method can be much faster"},
+      {0, NULL, 0, NULL, NULL},
+  };
+
+  RNA_def_struct_sdna_from(srna, "NodeGeometryMergeByDistance", "storage");
+
+  prop = RNA_def_property(srna, "mode", PROP_ENUM, PROP_NONE);
+  RNA_def_property_enum_items(prop, mode_items);
+  RNA_def_property_ui_text(prop, "Mode", "");
+  RNA_def_property_update(prop, NC_NODE | NA_EDITED, "rna_Node_socket_update");
+}
+
 static void def_geo_mesh_line(StructRNA *srna)
 {
   PropertyRNA *prop;
@@ -12053,12 +12079,12 @@ static void rna_def_node_link(BlenderRNA *brna)
 
   prop = RNA_def_property(srna, "is_valid", PROP_BOOLEAN, PROP_NONE);
   RNA_def_property_boolean_sdna(prop, NULL, "flag", NODE_LINK_VALID);
-  RNA_def_struct_ui_text(srna, "Valid", "Link is valid");
+  RNA_def_property_ui_text(prop, "Valid", "Link is valid");
   RNA_def_property_update(prop, NC_NODE | NA_EDITED, NULL);
 
   prop = RNA_def_property(srna, "is_muted", PROP_BOOLEAN, PROP_NONE);
   RNA_def_property_boolean_sdna(prop, NULL, "flag", NODE_LINK_MUTED);
-  RNA_def_struct_ui_text(srna, "Muted", "Link is muted and can be ignored");
+  RNA_def_property_ui_text(prop, "Muted", "Link is muted and can be ignored");
   RNA_def_property_update(prop, NC_NODE | NA_EDITED, NULL);
 
   prop = RNA_def_property(srna, "from_node", PROP_POINTER, PROP_NONE);

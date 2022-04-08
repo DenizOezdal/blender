@@ -318,7 +318,7 @@ static Curves *curves_evaluate_modifiers(struct Depsgraph *depsgraph,
       /* Created deformed coordinates array on demand. */
       blender::bke::CurvesGeometry &geometry = blender::bke::CurvesGeometry::wrap(
           curves->geometry);
-      MutableSpan<float3> positions = geometry.positions();
+      MutableSpan<float3> positions = geometry.positions_for_write();
 
       mti->deformVerts(md,
                        &mectx,
@@ -366,20 +366,20 @@ void BKE_curves_batch_cache_free(Curves *curves)
 
 namespace blender::bke {
 
-Curves *curves_new_nomain(const int point_size, const int curves_size)
+Curves *curves_new_nomain(const int points_num, const int curves_num)
 {
   Curves *curves = static_cast<Curves *>(BKE_id_new_nomain(ID_CV, nullptr));
   CurvesGeometry &geometry = CurvesGeometry::wrap(curves->geometry);
-  geometry.resize(point_size, curves_size);
+  geometry.resize(points_num, curves_num);
   return curves;
 }
 
-Curves *curves_new_nomain_single(const int point_size, const CurveType type)
+Curves *curves_new_nomain_single(const int points_num, const CurveType type)
 {
-  Curves *curves = curves_new_nomain(point_size, 1);
+  Curves *curves = curves_new_nomain(points_num, 1);
   CurvesGeometry &geometry = CurvesGeometry::wrap(curves->geometry);
-  geometry.offsets().last() = point_size;
-  geometry.curve_types().first() = type;
+  geometry.offsets_for_write().last() = points_num;
+  geometry.curve_types_for_write().first() = type;
   return curves;
 }
 
