@@ -27,58 +27,58 @@ vector environment_texture_direction_to_mirrorball(vector idir)
   return vector(u, v, 0.0);
 }
 
-void environment_texture_cubemap_xyz_to_uv(vector dir, output float u, output float v, output float maxAxis, output int index) 
+void environment_texture_cubemap_xyz_to_uv(vector dir, output float u, output float v, output float max_axis, output int index) 
 {
-  float absX = abs(dir.x);
-  float absY = abs(dir.y);
-  float absZ = abs(dir.z);
+  float abs_x = abs(dir.x);
+  float abs_y = abs(dir.y);
+  float abs_z = abs(dir.z);
   
-  int isXPositive = dir.x > 0 ? 1 : 0;
-  int isYPositive = dir.y > 0 ? 1 : 0;
-  int isZPositive = dir.z > 0 ? 1 : 0;
+  int is_x_positive = dir.x > 0.0 ? 1 : 0;
+  int is_y_positive = dir.y > 0.0 ? 1 : 0;
+  int is_z_positive = dir.z > 0.0 ? 1 : 0;
 
-  if (isXPositive && absX >= absY && absX >= absZ) {
-    maxAxis = absX;
+  if (is_x_positive && abs_x >= abs_y && abs_x >= abs_z) {
+    max_axis = abs_x;
     u = dir.y;
     v = dir.z;
     index = 0;
   }
-  if (!isXPositive && absX >= absY && absX >= absZ) {
-    maxAxis = absX;
+  if (!is_x_positive && abs_x >= abs_y && abs_x >= abs_z) {
+    max_axis = abs_x;
     u = -dir.y;
     v = dir.z;
     index = 1;
   }
-  if (isYPositive && absY >= absX && absY >= absZ) {
-    maxAxis = absY;
+  if (is_y_positive && abs_y >= abs_x && abs_y >= abs_z) {
+    max_axis = abs_y;
     u = -dir.x;
     v = dir.z;
     index = 2;
   }
-  if (!isYPositive && absY >= absX && absY >= absZ) {
-    maxAxis = absY;
+  if (!is_y_positive && abs_y >= abs_x && abs_y >= abs_z) {
+    max_axis = abs_y;
     u = dir.x;
     v = dir.z;
     index = 3;
   }
-  if (isZPositive && absZ >= absX && absZ >= absY) {
-    maxAxis = absZ;
+  if (is_z_positive && abs_z >= abs_x && abs_z >= abs_y) {
+    max_axis = abs_z;
     u = dir.x;
     v = dir.y;
     index = 4;
   }
-  if (!isZPositive && absZ >= absX && absZ >= absY) {
-    maxAxis = absZ;
+  if (!is_z_positive && abs_z >= abs_x && abs_z >= abs_y) {
+    max_axis = abs_z;
     u = dir.x;
     v = dir.y;
     index = 5;
   }
 }
 
-vector environment_texture_cubemap_cross_horizontal(float uc, float vc, float maxAxis, int index)
+vector environment_texture_cubemap_cross_horizontal(float uc, float vc, float max_axis, int index)
 {
-  float u = 0.125 * (uc / maxAxis + 1.0);
-  float v = 0.166667 * (vc / maxAxis + 1.0);
+  float u = 0.125 * (uc / max_axis + 1.0);
+  float v = 0.166667 * (vc / max_axis + 1.0);
 
   if(index == 0) {
     u += 0.5;
@@ -107,10 +107,10 @@ vector environment_texture_cubemap_cross_horizontal(float uc, float vc, float ma
    return vector(u, v, 0.0);
 }
 
-vector environment_texture_cubemap_stripe_horizontal(float uc, float vc, float maxAxis, int index)
+vector environment_texture_cubemap_stripe_horizontal(float uc, float vc, float max_axis, int index)
 {
-  float u = 0.083333 * (uc / maxAxis + 1.0);
-  float v = 0.5 * (vc / maxAxis + 1.0);
+  float u = 0.083333 * (uc / max_axis + 1.0);
+  float v = 0.5 * (vc / max_axis + 1.0);
 
   if (index == 1)
     u += 0.166666;
@@ -128,10 +128,10 @@ vector environment_texture_cubemap_stripe_horizontal(float uc, float vc, float m
    return vector(u, v, 0.0);
 }
 
-vector environment_texture_cubemap_stripe_vertical(float uc, float vc, float maxAxis, int index) 
+vector environment_texture_cubemap_stripe_vertical(float uc, float vc, float max_axis, int index) 
 {
-  float u = 0.5 * (uc / maxAxis + 1.0);
-  float v = 0.083333 * (vc / maxAxis + 1.0);
+  float u = 0.5 * (uc / max_axis + 1.0);
+  float v = 0.083333 * (vc / max_axis + 1.0);
 
   if (index == 0)
     v += 0.166666 * 5;
@@ -149,19 +149,19 @@ vector environment_texture_cubemap_stripe_vertical(float uc, float vc, float max
 
 vector environment_texture_direction_to_cubemap(vector dir, string cubemap_layout)
 {
-  float maxAxis = 0.0;
+  float max_axis = 0.0;
   float uc = 0.0;
   float vc = 0.0;
   int index = -1;
 
-  environment_texture_cubemap_xyz_to_uv(dir, uc, vc, maxAxis, index);
+  environment_texture_cubemap_xyz_to_uv(dir, uc, vc, max_axis, index);
 
   if (cubemap_layout == "cross_horizontal")
-    return environment_texture_cubemap_cross_horizontal(uc, vc, maxAxis, index);
+    return environment_texture_cubemap_cross_horizontal(uc, vc, max_axis, index);
   else if (cubemap_layout == "stripe_horizontal")
-    return environment_texture_cubemap_stripe_horizontal(uc, vc, maxAxis, index);
+    return environment_texture_cubemap_stripe_horizontal(uc, vc, max_axis, index);
   else
-    return environment_texture_cubemap_stripe_vertical(uc, vc, maxAxis, index);
+    return environment_texture_cubemap_stripe_vertical(uc, vc, max_axis, index);
 }
 
 shader node_environment_texture(

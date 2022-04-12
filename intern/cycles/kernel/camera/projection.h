@@ -203,58 +203,58 @@ ccl_device float2 direction_to_mirrorball(float3 dir)
 
 /* Cubemap projection <-> Cartesion direction */
 
-ccl_device void cubemap_xyz_to_uv(float3 co, float &u, float &v, float &maxAxis, int &index)
+ccl_device void cubemap_xyz_to_uv(float3 co, float &u, float &v, float &max_axis, int &index)
 {
-  float absX = std::fabs(co.x);
-  float absY = std::fabs(co.y);
-  float absZ = std::fabs(co.z);
+  float abs_x = fabsf(co.x);
+  float abs_y = fabsf(co.y);
+  float abs_z = fabsf(co.z);
 
-  bool isXPositive = co.x > 0 ? true : false;
-  bool isYPositive = co.y > 0 ? true : false;
-  bool isZPositive = co.z > 0 ? true : false;
+  bool is_x_positive = co.x > 0.0f ? true : false;
+  bool is_y_positive = co.y > 0.0f ? true : false;
+  bool is_z_positive = co.z > 0.0f ? true : false;
 
-  if (isXPositive && absX >= absY && absX >= absZ) {
-    maxAxis = absX;
+  if (is_x_positive && abs_x >= abs_y && abs_x >= abs_z) {
+    max_axis = abs_x;
     u = co.y;
     v = co.z;
     index = 0;
   }
-  if (!isXPositive && absX >= absY && absX >= absZ) {
-    maxAxis = absX;
+  if (!is_x_positive && abs_x >= abs_y && abs_x >= abs_z) {
+    max_axis = abs_x;
     u = -co.y;
     v = co.z;
     index = 1;
   }
-  if (isYPositive && absY >= absX && absY >= absZ) {
-    maxAxis = absY;
+  if (is_y_positive && abs_y >= abs_x && abs_y >= abs_z) {
+    max_axis = abs_y;
     u = -co.x;
     v = co.z;
     index = 2;
   }
-  if (!isYPositive && absY >= absX && absY >= absZ) {
-    maxAxis = absY;
+  if (!is_y_positive && abs_y >= abs_x && abs_y >= abs_z) {
+    max_axis = abs_y;
     u = co.x;
     v = co.z;
     index = 3;
   }
-  if (isZPositive && absZ >= absX && absZ >= absY) {
-    maxAxis = absZ;
+  if (is_z_positive && abs_z >= abs_x && abs_z >= abs_y) {
+    max_axis = abs_z;
     u = co.x;
     v = co.y;
     index = 4;
   }
-  if (!isZPositive && absZ >= absX && absZ >= absY) {
-    maxAxis = absZ;
+  if (!is_z_positive && abs_z >= abs_x && abs_z >= abs_y) {
+    max_axis = abs_z;
     u = co.x;
     v = co.y;
     index = 5;
   }
 }
 
-ccl_device float2 cubemap_uv_cross_horizontal(float uc, float vc, float maxAxis, int index)
+ccl_device float2 cubemap_uv_cross_horizontal(float uc, float vc, float max_axis, int index)
 {
-  float u = 0.125f * (uc / maxAxis + 1.0f);
-  float v = 0.166667f * (vc / maxAxis + 1.0f);
+  float u = 0.125f * (uc / max_axis + 1.0f);
+  float v = 0.166667f * (vc / max_axis + 1.0f);
 
   switch (index) {
     case 0: {
@@ -291,10 +291,10 @@ ccl_device float2 cubemap_uv_cross_horizontal(float uc, float vc, float maxAxis,
   return make_float2(u, v);
 }
 
-ccl_device float2 cubemap_uv_stripe_horizontal(float uc, float vc, float maxAxis, int index)
+ccl_device float2 cubemap_uv_stripe_horizontal(float uc, float vc, float max_axis, int index)
 {
-  float u = 0.083333f * (uc / maxAxis + 1.0f);
-  float v = 0.5f * (vc / maxAxis + 1.0f);
+  float u = 0.083333f * (uc / max_axis + 1.0f);
+  float v = 0.5f * (vc / max_axis + 1.0f);
 
   switch (index) {
     case 1: {
@@ -323,10 +323,10 @@ ccl_device float2 cubemap_uv_stripe_horizontal(float uc, float vc, float maxAxis
   return make_float2(u, v);
 }
 
-ccl_device float2 cubemap_uv_stripe_vertical(float uc, float vc, float maxAxis, int index)
+ccl_device float2 cubemap_uv_stripe_vertical(float uc, float vc, float max_axis, int index)
 {
-  float u = 0.5f * (uc / maxAxis + 1.0f);
-  float v = 0.083333f * (vc / maxAxis + 1.0f);
+  float u = 0.5f * (uc / max_axis + 1.0f);
+  float v = 0.083333f * (vc / max_axis + 1.0f);
 
   switch (index) {
     case 0: {
@@ -356,19 +356,19 @@ ccl_device float2 cubemap_uv_stripe_vertical(float uc, float vc, float maxAxis, 
 
 ccl_device float2 direction_to_cubemap(float3 dir, int layout)
 {
-  float maxAxis = 0.0;
-  float uc = 0.0;
-  float vc = 0.0;
+  float max_axis = 0.0f;
+  float uc = 0.0f;
+  float vc = 0.0f;
   int index = -1;
 
-  cubemap_xyz_to_uv(dir, uc, vc, maxAxis, index);
+  cubemap_xyz_to_uv(dir, uc, vc, max_axis, index);
 
   if (layout == NODE_ENVIRONMENT_CROSS_HORIZONTAL)
-    return cubemap_uv_cross_horizontal(uc, vc, maxAxis, index);
+    return cubemap_uv_cross_horizontal(uc, vc, max_axis, index);
   else if (layout == NODE_ENVIRONMENT_STRIPE_HORIZONTAL)
-    return cubemap_uv_stripe_horizontal(uc, vc, maxAxis, index);
+    return cubemap_uv_stripe_horizontal(uc, vc, max_axis, index);
   else
-    return cubemap_uv_stripe_vertical(uc, vc, maxAxis, index);
+    return cubemap_uv_stripe_vertical(uc, vc, max_axis, index);
 }
 
 ccl_device_inline float3 panorama_to_direction(ccl_constant KernelCamera *cam, float u, float v)

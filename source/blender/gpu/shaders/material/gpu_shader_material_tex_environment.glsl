@@ -33,50 +33,50 @@ void node_tex_environment_mirror_ball(vec3 co, out vec3 uv)
   uv = 0.5 * nco.xzz + 0.5;
 }
 
-int node_tex_environment_cubemap_xyz_to_uv(vec3 co, out float u, out float v, out float maxAxis)
+int node_tex_environment_cubemap_xyz_to_uv(vec3 co, out float u, out float v, out float max_axis)
 {
-  float absX = abs(co.x);
-  float absY = abs(co.y);
-  float absZ = abs(co.z);
+  float abs_x = abs(co.x);
+  float abs_y = abs(co.y);
+  float abs_z = abs(co.z);
   
-  bool isXPositive = co.x > 0 ? true : false;
-  bool isYPositive = co.y > 0 ? true : false;
-  bool isZPositive = co.z > 0 ? true : false;
+  bool is_x_positive = co.x > 0.0 ? true : false;
+  bool is_y_positive = co.y > 0.0 ? true : false;
+  bool is_z_positive = co.z > 0.0 ? true : false;
 
   int index = -1;
 
-  if (isXPositive && absX >= absY && absX >= absZ) {
-    maxAxis = absX;
+  if (is_x_positive && abs_x >= abs_y && abs_x >= abs_z) {
+    max_axis = abs_x;
     u = co.y;
     v = co.z;
     index = 0;
   }
- if (!isXPositive && absX >= absY && absX >= absZ) {
-    maxAxis = absX;
+ if (!is_x_positive && abs_x >= abs_y && abs_x >= abs_z) {
+    max_axis = abs_x;
     u = -co.y;
     v = co.z;
     index = 1;
   }
- if (isYPositive && absY >= absX && absY >= absZ) {
-    maxAxis = absY;
+ if (is_y_positive && abs_y >= abs_x && abs_y >= abs_z) {
+    max_axis = abs_y;
     u = -co.x;
     v = co.z;
     index = 2;
   }
- if (!isYPositive && absY >= absX && absY >= absZ) {
-    maxAxis = absY;
+ if (!is_y_positive && abs_y >= abs_x && abs_y >= abs_z) {
+    max_axis = abs_y;
     u = co.x;
     v = co.z;
     index = 3;
   }
- if (isZPositive && absZ >= absX && absZ >= absY) {
-    maxAxis = absZ;
+ if (is_z_positive && abs_z >= abs_x && abs_z >= abs_y) {
+    max_axis = abs_z;
     u = co.x;
     v = co.y;
     index = 4;
   }
- if (!isZPositive && absZ >= absX && absZ >= absY) {
-    maxAxis = absZ;
+ if (!is_z_positive && abs_z >= abs_x && abs_z >= abs_y) {
+    max_axis = abs_z;
     u = co.x;
     v = co.y;
     index = 5;
@@ -91,14 +91,14 @@ int node_tex_environment_cubemap_xyz_to_uv(vec3 co, out float u, out float v, ou
 
 void node_tex_environment_cubemap_cross_horizontal(vec3 co, out vec3 uv)
 {
-  float maxAxis = 0.0;
+  float max_axis = 0.0;
   float uc = 0.0;
   float vc = 0.0;
-  int index = node_tex_environment_cubemap_xyz_to_uv(co, uc, vc, maxAxis);
-  // Convert u range from -1 to 1 to 0 to 0.25 (1/4) as the texture space is 4 faces wide
-  float u = 0.125 * (uc / maxAxis + 1.0);
-  // Convert v range from -1 to 1 to 0 to 0.333.. (1/3) as the texture space is 3 faces high
-  float v = 0.166667 * (vc / maxAxis + 1.0);
+  int index = node_tex_environment_cubemap_xyz_to_uv(co, uc, vc, max_axis);
+  /* Convert u range from -1 to 1 to 0 to 0.25 (1/4) as the texture space is 4 faces wide. */
+  float u = 0.125 * (uc / max_axis + 1.0);
+  /* Convert v range from -1 to 1 to 0 to 0.333.. (1/3) as the texture space is 3 faces high. */
+  float v = 0.166667 * (vc / max_axis + 1.0);
 
   switch(index) {
     case 0:
@@ -144,14 +144,14 @@ void node_tex_environment_cubemap_cross_horizontal(vec3 co, out vec3 uv)
 
 void node_tex_environment_cubemap_stripe_horizontal(vec3 co, out vec3 uv)
 {
-  float maxAxis = 0.0;
+  float max_axis = 0.0;
   float uc = 0.0;
   float vc = 0.0;
-  int index = node_tex_environment_cubemap_xyz_to_uv(co, uc, vc, maxAxis);
-  // Convert u range from -1 to 1 to 0 to 0.166667 (1/6) as the texture space is 6 faces wide
-  float u = 0.083333 * (uc / maxAxis + 1.0);
-  // Convert v range from -1 to 1 to 0 to 1 as the texture space is 1 face high
-  float v = 0.5 * (vc / maxAxis + 1.0);
+  int index = node_tex_environment_cubemap_xyz_to_uv(co, uc, vc, max_axis);
+  /* Convert u range from -1 to 1 to 0 to 0.166667 (1/6) as the texture space is 6 faces wide. */
+  float u = 0.083333 * (uc / max_axis + 1.0);
+  /* Convert v range from -1 to 1 to 0 to 1 as the texture space is 1 face high. */
+  float v = 0.5 * (vc / max_axis + 1.0);
 
   switch(index) {
     case 1:
@@ -188,14 +188,14 @@ void node_tex_environment_cubemap_stripe_horizontal(vec3 co, out vec3 uv)
 
 void node_tex_environment_cubemap_stripe_vertical(vec3 co, out vec3 uv)
 {
-  float maxAxis = 0.0;
+  float max_axis = 0.0;
   float uc = 0.0;
   float vc = 0.0;
-  int index = node_tex_environment_cubemap_xyz_to_uv(co, uc, vc, maxAxis);
-  // Convert v range from -1 to 1 to 0 to 1 as the texture space is 1 face high
-  float u = 0.5 * (uc / maxAxis + 1.0);
-  // Convert u range from -1 to 1 to 0 to 0.166667 (1/6) as the texture space is 6 faces high
-  float v = 0.083333 * (vc / maxAxis + 1.0);
+  int index = node_tex_environment_cubemap_xyz_to_uv(co, uc, vc, max_axis);
+  /* Convert v range from -1 to 1 to 0 to 1 as the texture space is 1 face high. */
+  float u = 0.5 * (uc / max_axis + 1.0);
+  /* Convert u range from -1 to 1 to 0 to 0.166667 (1/6) as the texture space is 6 faces high. */
+  float v = 0.083333 * (vc / max_axis + 1.0);
 
   switch(index) {
     case 0:
