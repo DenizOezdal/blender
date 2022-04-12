@@ -587,6 +587,7 @@ void EnvironmentTextureNode::compile(SVMCompiler &compiler)
     flags |= NODE_IMAGE_COMPRESS_AS_SRGB;
   }
 
+  /* To avoid adding another node we steal the upper unused bits to store the cubemap layout. */
   flags |= cubemap_layout << 4;
 
   compiler.add_node(NODE_TEX_ENVIRONMENT,
