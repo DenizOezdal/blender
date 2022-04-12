@@ -43,36 +43,42 @@ void environment_texture_cubemap_xyz_to_uv(
     u = dir.y;
     v = dir.z;
     index = 0;
+    return;
   }
   if (!is_x_positive && abs_x >= abs_y && abs_x >= abs_z) {
     max_axis = abs_x;
     u = -dir.y;
     v = dir.z;
     index = 1;
+    return;
   }
   if (is_y_positive && abs_y >= abs_x && abs_y >= abs_z) {
     max_axis = abs_y;
     u = -dir.x;
     v = dir.z;
     index = 2;
+    return;
   }
   if (!is_y_positive && abs_y >= abs_x && abs_y >= abs_z) {
     max_axis = abs_y;
     u = dir.x;
     v = dir.z;
     index = 3;
+    return;
   }
   if (is_z_positive && abs_z >= abs_x && abs_z >= abs_y) {
     max_axis = abs_z;
     u = dir.x;
     v = dir.y;
     index = 4;
+    return;
   }
   if (!is_z_positive && abs_z >= abs_x && abs_z >= abs_y) {
     max_axis = abs_z;
     u = dir.x;
     v = dir.y;
     index = 5;
+    return;
   }
 }
 

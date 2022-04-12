@@ -203,7 +203,7 @@ ccl_device float2 direction_to_mirrorball(float3 dir)
 
 /* Cubemap projection <-> Cartesion direction */
 
-ccl_device void cubemap_xyz_to_uv(float3 co, float &u, float &v, float &max_axis, int &index)
+ccl_device void cubemap_xyz_to_uv(float3 co, float *u, float *v, float *max_axis, int *index)
 {
   float abs_x = fabsf(co.x);
   float abs_y = fabsf(co.y);
@@ -214,40 +214,46 @@ ccl_device void cubemap_xyz_to_uv(float3 co, float &u, float &v, float &max_axis
   bool is_z_positive = co.z > 0.0f ? true : false;
 
   if (is_x_positive && abs_x >= abs_y && abs_x >= abs_z) {
-    max_axis = abs_x;
-    u = co.y;
-    v = co.z;
-    index = 0;
+    *max_axis = abs_x;
+    *u = co.y;
+    *v = co.z;
+    *index = 0;
+    return;
   }
   if (!is_x_positive && abs_x >= abs_y && abs_x >= abs_z) {
-    max_axis = abs_x;
-    u = -co.y;
-    v = co.z;
-    index = 1;
+    *max_axis = abs_x;
+    *u = -co.y;
+    *v = co.z;
+    *index = 1;
+    return;
   }
   if (is_y_positive && abs_y >= abs_x && abs_y >= abs_z) {
-    max_axis = abs_y;
-    u = -co.x;
-    v = co.z;
-    index = 2;
+    *max_axis = abs_y;
+    *u = -co.x;
+    *v = co.z;
+    *index = 2;
+    return;
   }
   if (!is_y_positive && abs_y >= abs_x && abs_y >= abs_z) {
-    max_axis = abs_y;
-    u = co.x;
-    v = co.z;
-    index = 3;
+    *max_axis = abs_y;
+    *u = co.x;
+    *v = co.z;
+    *index = 3;
+    return;
   }
   if (is_z_positive && abs_z >= abs_x && abs_z >= abs_y) {
-    max_axis = abs_z;
-    u = co.x;
-    v = co.y;
-    index = 4;
+    *max_axis = abs_z;
+    *u = co.x;
+    *v = co.y;
+    *index = 4;
+    return;
   }
   if (!is_z_positive && abs_z >= abs_x && abs_z >= abs_y) {
-    max_axis = abs_z;
-    u = co.x;
-    v = co.y;
-    index = 5;
+    *max_axis = abs_z;
+    *u = co.x;
+    *v = co.y;
+    *index = 5;
+    return;
   }
 }
 
@@ -361,7 +367,7 @@ ccl_device float2 direction_to_cubemap(float3 dir, int layout)
   float vc = 0.0f;
   int index = -1;
 
-  cubemap_xyz_to_uv(dir, uc, vc, max_axis, index);
+  cubemap_xyz_to_uv(dir, &uc, &vc, &max_axis, &index);
 
   if (layout == NODE_ENVIRONMENT_CROSS_HORIZONTAL)
     return cubemap_uv_cross_horizontal(uc, vc, max_axis, index);

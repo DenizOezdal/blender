@@ -43,46 +43,44 @@ int node_tex_environment_cubemap_xyz_to_uv(vec3 co, out float u, out float v, ou
   bool is_y_positive = co.y > 0.0 ? true : false;
   bool is_z_positive = co.z > 0.0 ? true : false;
 
-  int index = -1;
-
   if (is_x_positive && abs_x >= abs_y && abs_x >= abs_z) {
     max_axis = abs_x;
     u = co.y;
     v = co.z;
-    index = 0;
+    return 0;
   }
   if (!is_x_positive && abs_x >= abs_y && abs_x >= abs_z) {
     max_axis = abs_x;
     u = -co.y;
     v = co.z;
-    index = 1;
+    return 1;
   }
   if (is_y_positive && abs_y >= abs_x && abs_y >= abs_z) {
     max_axis = abs_y;
     u = -co.x;
     v = co.z;
-    index = 2;
+    return 2;
   }
   if (!is_y_positive && abs_y >= abs_x && abs_y >= abs_z) {
     max_axis = abs_y;
     u = co.x;
     v = co.z;
-    index = 3;
+    return 3;
   }
   if (is_z_positive && abs_z >= abs_x && abs_z >= abs_y) {
     max_axis = abs_z;
     u = co.x;
     v = co.y;
-    index = 4;
+    return 4;
   }
   if (!is_z_positive && abs_z >= abs_x && abs_z >= abs_y) {
     max_axis = abs_z;
     u = co.x;
     v = co.y;
-    index = 5;
+    return 5;
   }
 
-  return index;
+  return 0;
 }
 
 /* As Blender's user facing coordinate system is different from the backend's coordinate system
