@@ -38,7 +38,7 @@ int node_tex_environment_cubemap_xyz_to_uv(vec3 co, out float u, out float v, ou
   float abs_x = abs(co.x);
   float abs_y = abs(co.y);
   float abs_z = abs(co.z);
-  
+
   bool is_x_positive = co.x > 0.0 ? true : false;
   bool is_y_positive = co.y > 0.0 ? true : false;
   bool is_z_positive = co.z > 0.0 ? true : false;
@@ -51,31 +51,31 @@ int node_tex_environment_cubemap_xyz_to_uv(vec3 co, out float u, out float v, ou
     v = co.z;
     index = 0;
   }
- if (!is_x_positive && abs_x >= abs_y && abs_x >= abs_z) {
+  if (!is_x_positive && abs_x >= abs_y && abs_x >= abs_z) {
     max_axis = abs_x;
     u = -co.y;
     v = co.z;
     index = 1;
   }
- if (is_y_positive && abs_y >= abs_x && abs_y >= abs_z) {
+  if (is_y_positive && abs_y >= abs_x && abs_y >= abs_z) {
     max_axis = abs_y;
     u = -co.x;
     v = co.z;
     index = 2;
   }
- if (!is_y_positive && abs_y >= abs_x && abs_y >= abs_z) {
+  if (!is_y_positive && abs_y >= abs_x && abs_y >= abs_z) {
     max_axis = abs_y;
     u = co.x;
     v = co.z;
     index = 3;
   }
- if (is_z_positive && abs_z >= abs_x && abs_z >= abs_y) {
+  if (is_z_positive && abs_z >= abs_x && abs_z >= abs_y) {
     max_axis = abs_z;
     u = co.x;
     v = co.y;
     index = 4;
   }
- if (!is_z_positive && abs_z >= abs_x && abs_z >= abs_y) {
+  if (!is_z_positive && abs_z >= abs_x && abs_z >= abs_y) {
     max_axis = abs_z;
     u = co.x;
     v = co.y;
@@ -85,9 +85,9 @@ int node_tex_environment_cubemap_xyz_to_uv(vec3 co, out float u, out float v, ou
   return index;
 }
 
-/* As Blender's user facing coordinate system is different from the backend's coordinate system (OpenGL)
- * the order of various sides of the cube are handled in the appropriate order.
- * So `[X, -X, Y, -Y, Z, -Z]` becomes `[X, -X, -Z, Z, Y, -Y]`. */
+/* As Blender's user facing coordinate system is different from the backend's coordinate system
+ * (OpenGL) the order of various sides of the cube are handled in the appropriate order. So `[X,
+ * -X, Y, -Y, Z, -Z]` becomes `[X, -X, -Z, Z, Y, -Y]`. */
 
 void node_tex_environment_cubemap_cross_horizontal(vec3 co, out vec3 uv)
 {
@@ -100,38 +100,32 @@ void node_tex_environment_cubemap_cross_horizontal(vec3 co, out vec3 uv)
   /* Convert v range from -1 to 1 to 0 to 0.333.. (1/3) as the texture space is 3 faces high. */
   float v = 0.166667 * (vc / max_axis + 1.0);
 
-  switch(index) {
-    case 0:
-    {
+  switch (index) {
+    case 0: {
       u += 0.5;
       v += 0.333333;
       break;
     }
-    case 1:
-    {
+    case 1: {
       v += 0.333333;
       break;
     }
-    case 2:
-    {
+    case 2: {
       u += 0.75;
       v += 0.333333;
       break;
     }
-    case 3:
-    {
+    case 3: {
       u += 0.25;
       v += 0.333333;
       break;
     }
-    case 4:
-    {
+    case 4: {
       u += 0.25;
       v += 0.666666;
       break;
     }
-    case 5:
-    {
+    case 5: {
       u += 0.25;
       v = 0.333333 - v;
       break;
@@ -153,29 +147,24 @@ void node_tex_environment_cubemap_stripe_horizontal(vec3 co, out vec3 uv)
   /* Convert v range from -1 to 1 to 0 to 1 as the texture space is 1 face high. */
   float v = 0.5 * (vc / max_axis + 1.0);
 
-  switch(index) {
-    case 1:
-    {
+  switch (index) {
+    case 1: {
       u += 0.166666;
       break;
     }
-    case 2:
-    {
+    case 2: {
       u += 0.166666 * 5;
       break;
     }
-    case 3:
-    {
+    case 3: {
       u += 0.166666 * 4;
       break;
     }
-    case 4:
-    {
+    case 4: {
       u += 0.166666 * 2;
       break;
     }
-    case 5:
-    {
+    case 5: {
       u += 0.166666 * 3;
       v = 1.0 - v;
       break;
@@ -197,29 +186,24 @@ void node_tex_environment_cubemap_stripe_vertical(vec3 co, out vec3 uv)
   /* Convert u range from -1 to 1 to 0 to 0.166667 (1/6) as the texture space is 6 faces high. */
   float v = 0.083333 * (vc / max_axis + 1.0);
 
-  switch(index) {
-    case 0:
-    {
+  switch (index) {
+    case 0: {
       v += 0.166666 * 5;
       break;
     }
-    case 1:
-    {
+    case 1: {
       v += 0.166666 * 4;
       break;
     }
-    case 3:
-    {
+    case 3: {
       v += 0.166666;
       break;
     }
-    case 4:
-    {
+    case 4: {
       v += 0.166666 * 3;
       break;
     }
-    case 5:
-    {
+    case 5: {
       v = 0.166666 * 3 - v;
       break;
     }
